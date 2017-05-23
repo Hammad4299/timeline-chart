@@ -32,6 +32,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.19.1/vis.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.19.1/vis.min.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -64,7 +65,44 @@
                     "IntraOp",
                     "Recovery"
                 ],
-                "roles": [],
+                "roles": [
+                    {
+                        "Name": "Surgeon",
+                        "Value": "Ru-ortho"
+                    },
+                    {
+                        "Name": "Postop nurse",
+                        "Value": "rupostop"
+                    },
+                    {
+                        "Name": "Check-in Nurse",
+                        "Value": "Ru-nurse2"
+                    },
+                    {
+                        "Name": "Anesthesiologist",
+                        "Value": "Ru-anasth"
+                    },
+                    {
+                        "Name": "Charge Nurse",
+                        "Value": "LRobinson"
+                    },
+                    {
+                        "Name": "Scheduler",
+                        "Value": "Ru-nurse2"
+                    },
+                    {
+                        "Name": "OR Manager",
+                        "Value": "RRector"
+                    },
+                    {
+                        "Name": "OR Educator",
+                        "Value": "ARaheem"
+                    },
+                    {
+                        "Name": "Charge Nurse (N)",
+                        "Value": "DTProNurse"
+                    }
+                ],
                 "stageupdates": [
                     {
                         "ObjectId": 338,
@@ -599,20 +637,50 @@
         ]
     }
 </script>
+<script id="labelHtml" type="text/html">
+    <div class="col-sm-4">
+        <span><b><span class="js-name"></span>:</b></span>
+        <span class="js-value"></span>
+    </div>
+</script>
 <script type="text/html" id="chart-temp">
     <div>
-        <div style="margin-top: 300px">
-            <div class="js-summary"  style="position: relative"></div>
+        <div>
+            <div class="col-sm-12 js-labels">
+            </div>
+            <div class="clearfix"></div>
+                <div style="margin-top: 300px">
+                <div class="js-summary"  style="position: relative"></div>
+            </div>
         </div>
-        <div style="margin-top: 300px">
-            <div class="js-preop"  style="position: relative"></div>
+        <hr />
+        <div>
+            <div class="col-sm-12 js-labels">
+            </div>
+            <div class="clearfix"></div>
+            <div style="margin-top: 300px">
+                <div class="js-preop"  style="position: relative"></div>
+            </div>
         </div>
-        <div style="margin-top: 300px">
-            <div class="js-interop"  style="position: relative"></div>
+        <hr />
+        <div>
+            <div class="col-sm-12 js-labels">
+            </div>
+            <div class="clearfix"></div>
+            <div style="margin-top: 300px">
+                <div class="js-interop"  style="position: relative"></div>
+            </div>
         </div>
-        <div style="margin-top: 300px">
-            <div class="js-postop"  style="position: relative"></div>
+        <hr />
+        <div>
+            <div class="col-sm-12 js-labels">
+            </div>
+            <div class="clearfix"></div>
+            <div style="margin-top: 300px">
+                <div class="js-postop"  style="position: relative"></div>
+            </div>
         </div>
+        <hr />
     </div>
 </script>
 

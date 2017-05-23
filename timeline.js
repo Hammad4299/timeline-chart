@@ -88,8 +88,6 @@ Timeline.prototype.initTimeline = function () {
 
         self.stepLabels.push(obj);
     }
-
-    console.log(self.stepLabels);
 }
 
 Timeline.prototype.showTimeLabels = function (text, item) {
@@ -109,6 +107,11 @@ Timeline.prototype.showFixedText = function () {
         this.displayTextLabel((left1+left2)/2, text, it1.className);
     }
 };
+
+Timeline.prototype.clearLabels = function () {
+    $(self.container).find('.tm-time-label').remove();
+    this.timeLabels = {};
+}
 
 Timeline.prototype.displayTextLabel = function (left, text, className) {
     var self = this;
@@ -232,16 +235,13 @@ Timeline.prototype.showTimelineLabels = function () {
 
 }
 
-Timeline.prototype.draw = function (dont) {
-    var that = this;
-    var self = that;
-    var items = new vis.DataSet(self.items);
-
-    var options = {
+Timeline.prototype.getOptions = function () {
+    var _this = this;
+    return {
         stack:true,
         timeAxis: {
             scale:'minute',
-            step:self.step
+            step:_this.step
         },
         orientation: {
             axis: 'top',
@@ -253,35 +253,49 @@ Timeline.prototype.draw = function (dont) {
             }
         },
         showMajorLabels: false,
+//        showMinorLabels: false,
         horizontalScroll: false,
         moveable: false,
+        autoResize: false,
         dataAttributes: ['id'],
-        start: self.min,
-        end: self.max,
+        start: _this.min,
+        end: _this.max,
         zoomable: false,
         showCurrentTime: false,
         template: function (item, element, data) {
-        var html = '<div class="vis-item-content '+item.className+'"><i class="fa"></i> '+item.content+'</div>';
-        var h = $(html);
+            var html = '<div class="vis-item-content '+item.className+'"><i class="fa"></i> '+item.content+'</div>';
+            var h = $(html);
 
-        if(item.type!='background'){
-            if(item.Status == "Start"){
-                h.find('.fa').addClass('fa-chevron-up');
-            }else{
-                h.find('.fa').addClass('fa-chevron-down');
+            if(item.type!='background'){
+                if(item.Status == "Start"){
+                    h.find('.fa').addClass('fa-chevron-up');
+                }else{
+                    h.find('.fa').addClass('fa-chevron-down');
+                }
             }
+
+            return h.html();
         }
-
-        return h.html();
-    }
     };
+}
 
-    if(self.groups){
-        self.groups.map(function (it) {
-            self.items.push({
+Timeline.prototype.draw = function (dont) {
+    var that = this;
+    var _this = that;
+    function createBoundedWrapper(object, method) {
+        return function() {
+            return method.apply(object, arguments);
+        };
+    }
+
+    var options = this.getOptions();
+
+    if(_this.groups){
+        _this.groups.map(function (it) {
+            _this.items.push({
                 type: 'background',
-                start: self.min,
-                end: self.max,
+                start: _this.min,
+                end: _this.max,
                 group: it.id,
                 content: '',
                 style: it.style
@@ -289,25 +303,29 @@ Timeline.prototype.draw = function (dont) {
         })
     }
 
-    items = self.items;
-    self.timeline = new vis.Timeline(self.container, items,self.groups,options);
+    var items = new vis.DataSet(_this.items);
+    _this.timeline = new vis.Timeline(_this.container, items,_this.groups,options);
+    _this.timeline.on('changed',function () {
+        _this.clearLabels();
+        setTimeout(function () {
+            _this.items.map(function (item) {
+                if(item.toShow)
+                    _this.showTimeLabels(item.toShow.format('HH:mm'),item);
+            });
 
-    setTimeout(function () {
-        self.items.map(function (item) {
-            if(item.toShow)
-                self.showTimeLabels(item.toShow.format('HH:mm'),item);
-        });
 
-        self.showFixedText();
-        self.showTimelineLabels();
-    },1000);
+            _this.showFixedText();
+        },1000);
+
+        _this.showTimelineLabels();
+    })
 }
 
 var jsonData = JSON.parse($('#jsonData').html());
 var container = $('.js-charts-container');
 var chartsTemp = $('#chart-temp').html();
 var i = 0;
-
+var arr = [];
 jsonData.PatientUpdate.map(function (patient) {
     var data = patient;
     data.stages = {};
@@ -336,6 +354,11 @@ jsonData.PatientUpdate.map(function (patient) {
     var preTime = new Timeline(preop);
     var interTime = new Timeline(interop);
     var postTime = new Timeline(postop);
+
+    arr.push(sumTime);
+    arr.push(preTime);
+    arr.push(interTime);
+    arr.push(postTime);
 
     var id = 0;
     var its = [];
@@ -384,8 +407,23 @@ jsonData.PatientUpdate.map(function (patient) {
     interTime.draw(true);
     preTime.draw();
     postTime.draw();
+
+    setLabels(data,$(preop));
     ++i;
 })
+
+function setLabels(jsonData, container) {
+    var temp = $('#labelHtml').html();
+    var insIn = container.parents().find('.js-labels');
+
+    jsonData.roles.map(function (it) {
+        console.log(it);
+        var toAdd = $(temp);
+        toAdd.find('.js-name').text(it.Name);
+        toAdd.find('.js-value').text(it.Value);
+        insIn.append(toAdd);
+    })
+}
 
 function getData(arr) {
     var data = [];
