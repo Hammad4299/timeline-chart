@@ -64,11 +64,11 @@ Timeline.prototype.initTimeline = function () {
                 }
 
                 obj.end = obj.start;
-            }
-            else if(cStep == fixedStartStep+2){//>fixedStartStep && cStep<=fixedEndStep) {
-                obj.start = undefined;
-                obj.end = self.fixedProps[1].toShow;
-            } else if(cStep == fixedStartStep+3) {
+            //}
+            // else if(cStep == fixedStartStep+2){//>fixedStartStep && cStep<=fixedEndStep) {
+            //     obj.start = undefined;
+            //     obj.end = self.fixedProps[1].toShow;
+            } else if(cStep == fixedStartStep+2) {
                 obj.start  = self.fixedProps[1].toShow;
             } else if (cStep > fixedEndStep){
                 var e = self.stepLabels[self.stepLabels.length-1].start;
@@ -77,7 +77,7 @@ Timeline.prototype.initTimeline = function () {
                 var d = self.min.clone().add((s+1)*self.step,'minutes');
                 obj.start = d;
 
-                if(cStep == fixedStartStep+4){
+                if(cStep == fixedStartStep+3){
                     self.stepLabels[self.stepLabels.length-1].end = obj.start;
                 }
             }
