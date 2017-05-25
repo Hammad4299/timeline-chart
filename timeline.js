@@ -114,6 +114,7 @@ Timeline.prototype.clearLabels = function () {
 }
 
 Timeline.prototype.displayTextLabel = function (left, text, className) {
+    return;
     var self = this;
     var maxind = 0;
     left = Math.floor(left);
@@ -162,7 +163,7 @@ Timeline.prototype.setItems = function (items) {
         for(var prop in item){
             nItem[prop] = item[prop];
         }
-        if(!nItem.id)
+        //if(!nItem.id)
             nItem.id = self.items.length;
 
         if(item.group === undefined){
@@ -232,7 +233,6 @@ Timeline.prototype.showTimelineLabels = function () {
         var toRet = e[cStep].start.format('HH:mm');
         elems.eq(x).text(toRet);
     }
-
 }
 
 Timeline.prototype.getOptions = function () {
@@ -263,7 +263,15 @@ Timeline.prototype.getOptions = function () {
         zoomable: false,
         showCurrentTime: false,
         template: function (item, element, data) {
-            var html = '<div class="vis-item-content '+item.className+'"><i class="fa"></i> '+item.content+'</div>';
+            var t = "";
+            if(item.toShow)
+                t = item.toShow.format('HH:mm');
+
+            var html = '<div class="vis-item-content '+item.className+'">' +
+                            '<i class="fa"></i>' +
+                            '<span>'+item.content+'</span>' +
+                            '<div><small><b>'+t+'</b></small></div>'+
+                        '</div>';
             var h = $(html);
 
             if(item.type!='background'){
@@ -280,19 +288,20 @@ Timeline.prototype.getOptions = function () {
 }
 
 Timeline.prototype.draw = function (dont) {
+    if(this.timeline)
+        this.timeline.destroy();
     var that = this;
     var _this = that;
-    function createBoundedWrapper(object, method) {
-        return function() {
-            return method.apply(object, arguments);
-        };
-    }
+
 
     var options = this.getOptions();
+    var g = null;
+    var its = _this.items.slice();
 
     if(_this.groups){
-        _this.groups.map(function (it) {
-            _this.items.push({
+        g = _this.groups.slice();
+        g.map(function (it) {
+            its.push({
                 type: 'background',
                 start: _this.min,
                 end: _this.max,
@@ -303,12 +312,12 @@ Timeline.prototype.draw = function (dont) {
         })
     }
 
-    var items = new vis.DataSet(_this.items);
-    _this.timeline = new vis.Timeline(_this.container, items,_this.groups,options);
+    var items = new vis.DataSet(its);
+    _this.timeline = new vis.Timeline(_this.container, items,g,options);
     _this.timeline.on('changed',function () {
         _this.clearLabels();
         setTimeout(function () {
-            _this.items.map(function (item) {
+            its.map(function (item) {
                 if(item.toShow)
                     _this.showTimeLabels(item.toShow.format('HH:mm'),item);
             });
@@ -321,107 +330,60 @@ Timeline.prototype.draw = function (dont) {
     })
 }
 
-var jsonData = JSON.parse($('#jsonData').html());
-var container = $('.js-charts-container');
-var chartsTemp = $('#chart-temp').html();
-var i = 0;
-var arr = [];
-jsonData.PatientUpdate.map(function (patient) {
-    var data = patient;
-    data.stages = {};
-
-    patient.stageupdates.map(function (stage) {
-        if(!data.stages[stage.Parent])
-            data.stages[stage.Parent] = [];
-
-        data.stages[stage.Parent].push(stage);
-    });
-
-    data.groups = [];
-    var toIns = $(chartsTemp);
-    toIns.attr('data-chart-id',i);
-    container.append(toIns);
-
-
-    var chartsContainer = container.find('[data-chart-id='+i+']');
-
-    var preop = chartsContainer.find('.js-preop')[0];
-    var interop = chartsContainer.find('.js-interop')[0];
-    var postop = chartsContainer.find('.js-postop')[0];
-    var summary = chartsContainer.find('.js-summary')[0];
-
-    var sumTime = new Timeline(summary);
-    var preTime = new Timeline(preop);
-    var interTime = new Timeline(interop);
-    var postTime = new Timeline(postop);
-
-    arr.push(sumTime);
-    arr.push(preTime);
-    arr.push(interTime);
-    arr.push(postTime);
-
-    var id = 0;
-    var its = [];
-    for(var prop in patient.summary){
-        var color = "";
-        if(prop == 'PatientSummary'){
-            color = jsonData.Palette.Patient;
-        }else if(prop == 'Nursing'){
-            color = jsonData.Palette.Nursing;
-        }else if(prop == 'EMS'){
-            color = jsonData.Palette.EMS;
-        }else if(prop == 'Anesthesia'){
-            color = jsonData.Palette.Anesthesia;
-        }else if(prop == 'Surgeon'){
-            color = jsonData.Palette.Surgeon;
-        }
-
-        sumTime.addGroup(prop,id,color);
-
-        patient.summary[prop].map(function (it) {
-            its.push({
-                content: it.Name,
-                Status: it.Status,
-                group: id,
-                start: moment(moment(it.Timestamp,'YYYY-MM-DD HH:mm').format('HH:mm'),'HH:mm')
-            })
-        });
-
-        id++;
-    }
-
-    sumTime.setItems(its);
-    preTime.setItems(getData(data.stages.Preop));
-    interTime.setItems(getData(data.stages.IntraOp));
-    postTime.setItems(getData(data.stages.Recovery,'Pre'));
-    sumTime.initTimeline();
-    preTime.initTimeline();
-    interTime.initTimeline();
-    postTime.initTimeline();
-    sumTime.prepare();
-    preTime.prepare();
-    interTime.prepare();
-    postTime.prepare();
-
-    sumTime.draw();
-    interTime.draw(true);
-    preTime.draw();
-    postTime.draw();
-
-    setLabels(data,$(preop));
-    ++i;
-})
-
 function setLabels(jsonData, container) {
     var temp = $('#labelHtml').html();
-    var insIn = container.parents().find('.js-labels');
+    var insIn = container.parents('.js-chart-section').find('.js-labels');
 
-    jsonData.roles.map(function (it) {
-        console.log(it);
+
+
+    var toAdd = []
+    toAdd.push({
+        Name: "Scheduled Date & Time (Start)",
+        Value: jsonData.SchStartTime
+    });
+
+    toAdd.push({
+        Name: "Scheduled Date & Time (End)",
+        Value: jsonData.SchEndTime
+    });
+
+    toAdd.push({
+        Name: "OR#",
+        Value: jsonData.OR
+    });
+
+
+    toAdd.push({
+        Name: "Case #",
+        Value: jsonData.Case
+    });
+
+    toAdd.push({
+        Name: "Patient",
+        Value: jsonData.Name
+    });
+
+    toAdd.push({
+        Name: "Procedure",
+        Value: jsonData.ProcName
+    });
+
+    toAdd.push({
+        Name: "Specialty",
+        Value: jsonData.Specialty
+    });
+
+    var a = jsonData.roles.slice();
+    for(var x=toAdd.length-1;x>=0;--x)
+        a.unshift(toAdd[x]);
+
+    a.map(function (it) {
         var toAdd = $(temp);
-        toAdd.find('.js-name').text(it.Name);
-        toAdd.find('.js-value').text(it.Value);
-        insIn.append(toAdd);
+        if(it.Value!=""){
+            toAdd.find('.js-name').text(it.Name);
+            toAdd.find('.js-value').text(it.Value);
+            insIn.append(toAdd);
+        }
     })
 }
 
@@ -432,12 +394,170 @@ function getData(arr) {
             id: it.ObjectId,
             content: it.Name,
             Status: it.Status,
+            fixed: it.fixed,
             start: moment(moment(it.TimeStamp,'YYYY-MM-DD HH:mm').format('HH:mm'),'HH:mm')
         });
     });
 
-    if(arr.length>4)
-        data[4].fixed = true;
-
     return data;
 }
+
+function setFooter(data, container) {
+    container.find('.js-status').text(data.Status);
+
+    container.find('.js-lst').each(function () {
+        var prop = $(this).attr('data-prop');
+        if(data[prop] && data[prop].length>0){
+            var ol = $(this).find('ol');
+            var toAdd = '<li></li>';
+            data[prop].map(function (it) {
+                var toIns = $(toAdd);
+                toIns.text(it.Note);
+                ol.append(toIns);
+            })
+        }else{
+            $(this).addClass('hidden');
+        }
+    })
+}
+
+$(document).ready(function () {
+    $(document).on('click','.js-show-detail',function () {
+        var val = $(this).attr('data-val');
+        var parent = $('.js-patient-chart');
+        parent.find('[data-show]').each(function () {
+            if($(this).attr('data-show').indexOf(val)!=-1){
+                $(this).removeClass('hidden');
+                $(this).find('.js-vs-chart').data('tm').draw();
+            }
+        })
+    });
+
+
+    var jsonData = JSON.parse($('#jsonData').html());
+    var container = $('.js-charts-container');
+    var chartsTemp = $('#chart-temp').html();
+    var legends = $('#legends-temp').html();
+
+    var initialPage = {
+        leftImg: $('#left-header-img'),
+        rightImg: $('#right-header-img'),
+        schCases: $('.js-scheduled-cases'),
+        comCases: $('.js-completed-cases'),
+        ontimeCases: $('.js-ontime'),
+        scrshot: $('#scrshot')
+    };
+
+
+    initialPage.leftImg.attr('src',jsonData.ImageIcon1);
+    initialPage.rightImg.attr('src',jsonData.ImageIcon2);
+    initialPage.schCases.text(jsonData.ScheduledCases);
+    initialPage.comCases.text(jsonData.CompletedCases);
+    initialPage.ontimeCases.text(jsonData.OnTimeStarts);
+    initialPage.scrshot.attr('src',jsonData.scrshot);
+
+    var i = 0;
+    var arr = [];
+    jsonData.PatientUpdate.map(function (patient) {
+        var data = patient;
+        data.stages = {};
+
+        patient.stageupdates.map(function (stage) {
+            if(!data.stages[stage.Parent])
+                data.stages[stage.Parent] = [];
+
+            data.stages[stage.Parent].push(stage);
+        });
+
+        data.groups = [];
+        var toIns = $(chartsTemp);
+        toIns.attr('data-chart-id',i);
+        container.append(toIns);
+
+
+        var chartsContainer = container.find('[data-chart-id='+i+']');
+
+        var preop = chartsContainer.find('.js-preop')[0];
+        var interop = chartsContainer.find('.js-interop')[0];
+        var postop = chartsContainer.find('.js-postop')[0];
+        var summary = chartsContainer.find('.js-summary')[0];
+        $(preop).parents('.js-chart-section').append(legends);
+        $(postop).parents('.js-chart-section').append(legends);
+        $(interop).parents('.js-chart-section').append(legends);
+        $(summary).parents('.js-chart-section').append(legends);
+
+        var sumTime = new Timeline(summary);
+        var preTime = new Timeline(preop);
+        var interTime = new Timeline(interop);
+        var postTime = new Timeline(postop);
+
+        arr.push(sumTime);
+        arr.push(preTime);
+        arr.push(interTime);
+        arr.push(postTime);
+
+        var id = 0;
+        var its = [];
+        for(var prop in patient.summary){
+            var color = "";
+            if(prop == 'PatientSummary'){
+                color = jsonData.Palette.Patient;
+            }else if(prop == 'Nursing'){
+                color = jsonData.Palette.Nursing;
+            }else if(prop == 'EMS'){
+                color = jsonData.Palette.EMS;
+            }else if(prop == 'Anesthesia'){
+                color = jsonData.Palette.Anesthesia;
+            }else if(prop == 'Surgeon'){
+                color = jsonData.Palette.Surgeon;
+            }
+
+            sumTime.addGroup(prop,id,color);
+
+            patient.summary[prop].map(function (it) {
+                its.push({
+                    content: it.Name,
+                    Status: it.Status,
+                    group: id,
+                    start: moment(moment(it.Timestamp,'YYYY-MM-DD HH:mm').format('HH:mm'),'HH:mm')
+                })
+            });
+
+            id++;
+        }
+
+        sumTime.setItems(its);
+        preTime.setItems(getData(data.stages.PreOp));
+        interTime.setItems(getData(data.stages.IntraOp));
+        postTime.setItems(getData(data.stages.PostOp,'Pre'));
+        sumTime.initTimeline();
+        preTime.initTimeline();
+        interTime.initTimeline();
+        postTime.initTimeline();
+        sumTime.prepare();
+        preTime.prepare();
+        interTime.prepare();
+        postTime.prepare();
+
+        sumTime.draw();
+        interTime.draw(true);
+        preTime.draw();
+        postTime.draw();
+
+        $(preop).data('tm',preTime);
+        $(interop).data('tm',interTime);
+        $(postop).data('tm',postTime);
+        $(summary).data('tm',sumTime);
+
+        setLabels(data,$(preop));
+        setLabels(data,$(summary));
+        setLabels(data,$(postop));
+        setLabels(data,$(interop));
+
+        setFooter(data,$(preop).parents('.js-chart-section'));
+        setFooter(data,$(summary).parents('.js-chart-section'));
+        setFooter(data,$(postop).parents('.js-chart-section'));
+        setFooter(data,$(interop).parents('.js-chart-section'));
+        ++i;
+    })
+})

@@ -13,8 +13,7 @@
         }
 
         .pallete-color-2, .vis-item.vis-box.pallete-color-2 {
-            background-color: #f2db94
-        ;
+            background-color: #f2db94;
         }
 
         .pallete-color-3, .vis-item.vis-box.pallete-color-3 {
@@ -24,10 +23,23 @@
         .pallete-color-4, .vis-item.vis-box.pallete-color-4 {
             background-color: #76c0ef;
         }
-
         .pallete-color-5, .vis-item.vis-box.pallete-color-5 {
-            background-color: #cddbf2
+            background-color: #cddbf2;
         }
+
+
+
+        .print-page-break{
+            page-break-after: always;
+            page-break-inside: avoid;
+        }
+
+
+            .chart-section{
+                margin-top: 200px;
+            }
+        
+
     </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.19.1/vis.min.js"></script>
@@ -40,9 +52,11 @@
     {
         "ImageIcon1": "",
         "ImageIcon2": "",
-        "ScheduledCases": 3,
-        "CompletedCases": 0,
-        "OnTimeStarts": "0%",
+        "ScheduledCases": 1,
+        "CompletedCases": 1,
+        "OnTimeStarts": "0",
+        "ReportTitle": "OR Operations Report",
+        "ReportDate": "4/13/2017",
         "Palette": {
             "Patient": "#008895",
             "Nursing": "#76c0ef",
@@ -52,586 +66,412 @@
         },
         "PatientUpdate": [
             {
-                "Name": "Joh, F",
-                "ProcName": "Knee Arthroscopy",
-                "OR": "OR3",
-                "Case": "9",
+                "Name": "Nat",
+                "ProcName": "Knee Replacement",
+                "OR": "OR1",
+                "Case": "Ap case 1",
                 "Specialty": "",
                 "Status": "",
-                "SchStartTime": "09:15",
+                "SchStartTime": "4/13/2017 9:00:00 AM",
                 "SchEndTime": "",
                 "Parent": [
-                    "Preop",
+                    "PreOp",
                     "IntraOp",
-                    "Recovery"
+                    "PostOp"
                 ],
                 "roles": [
                     {
                         "Name": "Surgeon",
-                        "Value": "Ru-ortho"
+                        "Value": "Harrison"
                     },
                     {
-                        "Name": "Postop nurse",
-                        "Value": "rupostop"
-                    },
-                    {
-                        "Name": "Check-in Nurse",
-                        "Value": "Ru-nurse2"
+                        "Name": "CRNA",
+                        "Value": "KWeatherley"
                     },
                     {
                         "Name": "Anesthesiologist",
-                        "Value": "Ru-anasth"
+                        "Value": "TBorsari"
                     },
                     {
-                        "Name": "Charge Nurse",
-                        "Value": "LRobinson"
+                        "Name": "Circulating Nurse",
+                        "Value": "CAmbatali"
                     },
                     {
-                        "Name": "Scheduler",
-                        "Value": "Ru-nurse2"
+                        "Name": "Scrub Tech",
+                        "Value": "CAssaf"
                     },
                     {
-                        "Name": "OR Manager",
-                        "Value": "RRector"
+                        "Name": "SRNA",
+                        "Value": "MBougiamas"
                     },
                     {
-                        "Name": "OR Educator",
-                        "Value": "ARaheem"
+                        "Name": "Break",
+                        "Value": "DStackhouse"
                     },
                     {
-                        "Name": "Charge Nurse (N)",
-                        "Value": "DTProNurse"
+                        "Name": "On Call CRNA #2",
+                        "Value": "MBougiamas"
+                    },
+                    {
+                        "Name": "Circulating Nurse 2",
+                        "Value": "CAmbatali"
+                    },
+                    {
+                        "Name": "Scrub Tech 2",
+                        "Value": "CAssaf"
                     }
                 ],
                 "stageupdates": [
                     {
                         "ObjectId": 338,
-                        "Name": "Preop Arrived",
-                        "Parent": "Preop",
-                        "TimeStamp": "2017-05-19 15:05",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Start"
+                        "Name": "PreOp Nursing Start",
+                        "Parent": "PreOp",
+                        "TimeStamp": "2017-04-13 09:15",
+                        "UpdateBy": "VADemoadmin",
+                        "Status": "Start",
+                        "SqueezeBefore": false,
+                        "SqueezeAfter": false
                     },
                     {
                         "ObjectId": 358,
-                        "Name": "Preop Complete",
-                        "Parent": "Preop",
-                        "TimeStamp": "2017-05-19 16:15",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Complete"
+                        "Name": "PreOp Nursing Completed",
+                        "Parent": "PreOp",
+                        "TimeStamp": "2017-04-13 09:30",
+                        "UpdateBy": "VADemoadmin",
+                        "Status": "Complete",
+                        "SqueezeBefore": false,
+                        "SqueezeAfter": false
                     },
                     {
-                        "ObjectId": 478,
-                        "Name": "Room Ready EMS",
-                        "Parent": "IntraOp",
-                        "TimeStamp": "2017-05-19 08:38",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Complete"
+                        "ObjectId": 562,
+                        "Name": "Circulator PreOp Start",
+                        "Parent": "PreOp",
+                        "TimeStamp": "2017-04-13 10:15",
+                        "UpdateBy": "VADemoadmin",
+                        "Status": "Start",
+                        "SqueezeBefore": false,
+                        "SqueezeAfter": false
                     },
                     {
-                        "ObjectId": 461,
-                        "Name": "Nerve Block",
-                        "Parent": "IntraOp",
-                        "TimeStamp": "2017-05-19 09:38",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Complete"
+                        "ObjectId": 564,
+                        "Name": "Transport to OR",
+                        "Parent": "PreOp",
+                        "TimeStamp": "2017-04-13 10:30",
+                        "UpdateBy": "VADemoadmin",
+                        "Status": "Complete",
+                        "SqueezeBefore": false,
+                        "SqueezeAfter": false
+                    },
+                    {
+                        "ObjectId": 556,
+                        "Name": "Surgeon PreOp Start",
+                        "Parent": "PreOp",
+                        "TimeStamp": "2017-04-13 09:32",
+                        "UpdateBy": "VADemoadmin",
+                        "Status": "Start",
+                        "SqueezeBefore": false,
+                        "SqueezeAfter": false
+                    },
+                    {
+                        "ObjectId": 558,
+                        "Name": "Surgeon PreOp Completed",
+                        "Parent": "PreOp",
+                        "TimeStamp": "2017-04-13 09:40",
+                        "UpdateBy": "VADemoadmin",
+                        "Status": "Complete",
+                        "SqueezeBefore": false,
+                        "SqueezeAfter": false
+                    },
+                    {
+                        "ObjectId": 559,
+                        "Name": "Anesthesia PreOp Start",
+                        "Parent": "PreOp",
+                        "TimeStamp": "2017-04-13 09:50",
+                        "UpdateBy": "VADemoadmin",
+                        "Status": "Start",
+                        "SqueezeBefore": false,
+                        "SqueezeAfter": false
+                    },
+                    {
+                        "ObjectId": 561,
+                        "Name": "Anesthesia PreOp Complete",
+                        "Parent": "PreOp",
+                        "TimeStamp": "2017-04-13 10:05",
+                        "UpdateBy": "VADemoadmin",
+                        "Status": "Complete",
+                        "SqueezeBefore": false,
+                        "SqueezeAfter": false
                     },
                     {
                         "ObjectId": 340,
                         "Name": "Patient In-Room",
                         "Parent": "IntraOp",
-                        "TimeStamp": "2017-05-19 10:30",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Start"
-                    },
-                    {
-                        "ObjectId": 483,
-                        "Name": "Surgeon In Room",
-                        "Parent": "IntraOp",
-                        "TimeStamp": "2017-05-19 11:30",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Start"
-                    },
-                    {
-                        "ObjectId": 342,
-                        "Name": "Sedation",
-                        "Parent": "IntraOp",
-                        "TimeStamp": "2017-05-19 12:10",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Complete"
+                        "TimeStamp": "2017-04-13 10:50",
+                        "UpdateBy": "VADemoadmin",
+                        "Status": "Start",
+                        "SqueezeBefore": false,
+                        "SqueezeAfter": false
                     },
                     {
                         "ObjectId": 486,
                         "Name": "Timeout",
                         "Parent": "IntraOp",
-                        "TimeStamp": "2017-05-19 12:45",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Complete"
-                    },
-                    {
-                        "ObjectId": 422,
-                        "Name": "Procedure Started",
-                        "Parent": "IntraOp",
-                        "TimeStamp": "2017-05-19 14:20",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Start"
+                        "TimeStamp": "2017-04-13 11:40",
+                        "UpdateBy": "VADemoadmin",
+                        "Status": "Complete",
+                        "SqueezeBefore": false,
+                        "SqueezeAfter": false
                     },
                     {
                         "ObjectId": 347,
                         "Name": "Wheels Out",
                         "Parent": "IntraOp",
-                        "TimeStamp": "2017-05-19 15:20",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Complete"
+                        "TimeStamp": "2017-04-13 14:15",
+                        "UpdateBy": "VADemoadmin",
+                        "Status": "Complete",
+                        "SqueezeBefore": false,
+                        "SqueezeAfter": false
+                    },
+                    {
+                        "ObjectId": 483,
+                        "Name": "Surgeon In Room",
+                        "Parent": "IntraOp",
+                        "TimeStamp": "2017-04-13 11:00",
+                        "UpdateBy": "VADemoadmin",
+                        "Status": "Start",
+                        "SqueezeBefore": false,
+                        "SqueezeAfter": false
+                    },
+                    {
+                        "ObjectId": 422,
+                        "Name": "Incision Time",
+                        "Parent": "IntraOp",
+                        "TimeStamp": "2017-04-13 11:50",
+                        "UpdateBy": "VADemoadmin",
+                        "Status": "Start",
+                        "SqueezeBefore": false,
+                        "SqueezeAfter": true
+                    },
+                    {
+                        "ObjectId": 566,
+                        "Name": "Surgery End",
+                        "Parent": "IntraOp",
+                        "TimeStamp": "2017-04-13 14:00",
+                        "UpdateBy": "VADemoadmin",
+                        "Status": "Complete",
+                        "SqueezeBefore": true,
+                        "SqueezeAfter": false
+                    },
+                    {
+                        "ObjectId": 461,
+                        "Name": "Nerve Block Complete",
+                        "Parent": "IntraOp",
+                        "TimeStamp": "2017-04-13 11:10",
+                        "UpdateBy": "VADemoadmin",
+                        "Status": "Complete",
+                        "SqueezeBefore": false,
+                        "SqueezeAfter": false
+                    },
+                    {
+                        "ObjectId": 565,
+                        "Name": "Anesthesia Started",
+                        "Parent": "IntraOp",
+                        "TimeStamp": "2017-04-13 09:15",
+                        "UpdateBy": "VADemoadmin",
+                        "Status": "Start",
+                        "SqueezeBefore": false,
+                        "SqueezeAfter": false
+                    },
+                    {
+                        "ObjectId": 342,
+                        "Name": "Anesthesia Ready",
+                        "Parent": "IntraOp",
+                        "TimeStamp": "2017-04-13 11:30",
+                        "UpdateBy": "VADemoadmin",
+                        "Status": "Complete",
+                        "SqueezeBefore": false,
+                        "SqueezeAfter": false
+                    },
+                    {
+                        "ObjectId": 478,
+                        "Name": "Room Ready - EMS",
+                        "Parent": "IntraOp",
+                        "TimeStamp": "2017-04-13 10:35",
+                        "UpdateBy": "VADemoadmin",
+                        "Status": "Complete",
+                        "SqueezeBefore": false,
+                        "SqueezeAfter": false
+                    },
+                    {
+                        "ObjectId": 350,
+                        "Name": "Patient Discharged",
+                        "Parent": "PostOp",
+                        "TimeStamp": "2017-04-13 15:10",
+                        "UpdateBy": "VADemoadmin",
+                        "Status": "Complete",
+                        "SqueezeBefore": false,
+                        "SqueezeAfter": false
                     },
                     {
                         "ObjectId": 348,
                         "Name": "Patient Arrived",
-                        "Parent": "Recovery",
-                        "TimeStamp": "2017-05-19 13:08",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Start"
+                        "Parent": "PostOp",
+                        "TimeStamp": "2017-04-13 14:30",
+                        "UpdateBy": "VADemoadmin",
+                        "Status": "Start",
+                        "SqueezeBefore": false,
+                        "SqueezeAfter": false
                     },
                     {
                         "ObjectId": 350,
-                        "Name": "Patient Discharge",
-                        "Parent": "Recovery",
-                        "TimeStamp": "2017-05-19 15:25",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Complete"
+                        "Name": "Patient Discharged",
+                        "Parent": "PostOp",
+                        "TimeStamp": "2017-04-13 15:10",
+                        "UpdateBy": "VADemoadmin",
+                        "Status": "Complete",
+                        "SqueezeBefore": false,
+                        "SqueezeAfter": false
                     }
                 ],
-                "delayReasons": [],
+                "delayReasons": [
+                    {
+                        "TimeStamp": "2017-04-13 05:04",
+                        "Note": "Test"
+                    },
+                    {
+                        "UpdateBy": "VADemoadmin",
+                        "TimeStamp": "2017-05-24 01:27",
+                        "Note": "This is a test reason"
+                    }
+                ],
                 "cancelDetails": [],
-                "cancelReasons": [],
+                "cancelReasons": [
+                    {
+                        "TimeStamp": "2017-04-13 01:04",
+                        "Note": "Test"
+                    },
+                    {
+                        "UpdateBy": "VADemoadmin",
+                        "TimeStamp": "2017-05-23 21:27",
+                        "Note": "This is a test reason"
+                    }
+                ],
                 "summary": {
-                    "PatientSummary": [
+                    "Patient": [
                         {
                             "Name": "Patient In-Room",
                             "Status": "Start",
-                            "Timestamp": "2017-05-19 08:38"
+                            "Timestamp": "2017-04-13 10:50"
                         },
                         {
                             "Name": "Timeout",
                             "Status": "Complete",
-                            "Timestamp": "2017-05-19 08:38"
+                            "Timestamp": "2017-04-13 11:40"
                         },
                         {
-                            "Name": "Patient Discharge",
+                            "Name": "Patient Discharged",
                             "Status": "Complete",
-                            "Timestamp": "2017-05-19 15:08"
+                            "Timestamp": "2017-04-13 15:10"
                         }
                     ],
                     "Nursing": [
                         {
-                            "Name": "Preop Arrived",
+                            "Name": "PreOp Nursing Start",
                             "Status": "Start",
-                            "Timestamp": "2017-05-19 15:05"
+                            "Timestamp": "2017-04-13 09:15"
                         },
                         {
-                            "Name": "Preop Complete",
+                            "Name": "PreOp Nursing Completed",
                             "Status": "Complete",
-                            "Timestamp": "2017-05-19 15:05"
+                            "Timestamp": "2017-04-13 09:30"
+                        },
+                        {
+                            "Name": "Circulator PreOp Start",
+                            "Status": "Start",
+                            "Timestamp": "2017-04-13 10:15"
+                        },
+                        {
+                            "Name": "Transport to OR",
+                            "Status": "Complete",
+                            "Timestamp": "2017-04-13 10:30"
                         },
                         {
                             "Name": "Wheels Out",
                             "Status": "Complete",
-                            "Timestamp": "2017-05-19 08:38"
+                            "Timestamp": "2017-04-13 14:15"
                         },
                         {
                             "Name": "Patient Arrived",
                             "Status": "Start",
-                            "Timestamp": "2017-05-19 15:08"
+                            "Timestamp": "2017-04-13 14:30"
                         },
                         {
-                            "Name": "Patient Discharge",
+                            "Name": "Patient Discharged",
                             "Status": "Complete",
-                            "Timestamp": "2017-05-19 15:08"
+                            "Timestamp": "2017-04-13 15:10"
                         }
                     ],
                     "Surgeon": [
                         {
-                            "Name": "Surgeon In Room",
+                            "Name": "Surgeon PreOp Start",
                             "Status": "Start",
-                            "Timestamp": "2017-05-19 08:38"
+                            "Timestamp": "2017-04-13 09:32"
                         },
                         {
-                            "Name": "Procedure Started",
+                            "Name": "Surgeon PreOp Completed",
+                            "Status": "Complete",
+                            "Timestamp": "2017-04-13 09:40"
+                        },
+                        {
+                            "Name": "Surgeon In Room",
                             "Status": "Start",
-                            "Timestamp": "2017-05-19 08:38"
+                            "Timestamp": "2017-04-13 11:00"
+                        },
+                        {
+                            "Name": "Incision Time",
+                            "Status": "Start",
+                            "Timestamp": "2017-04-13 11:50"
+                        },
+                        {
+                            "Name": "Surgery End",
+                            "Status": "Complete",
+                            "Timestamp": "2017-04-13 14:00"
                         }
                     ],
                     "Anesthesia": [
                         {
-                            "Name": "Nerve Block",
-                            "Status": "Complete",
-                            "Timestamp": "2017-05-19 08:38"
+                            "Name": "Anesthesia PreOp Start",
+                            "Status": "Start",
+                            "Timestamp": "2017-04-13 09:50"
                         },
                         {
-                            "Name": "Sedation",
+                            "Name": "Anesthesia PreOp Complete",
                             "Status": "Complete",
-                            "Timestamp": "2017-05-19 08:38"
+                            "Timestamp": "2017-04-13 10:05"
+                        },
+                        {
+                            "Name": "Nerve Block Complete",
+                            "Status": "Complete",
+                            "Timestamp": "2017-04-13 11:10"
+                        },
+                        {
+                            "Name": "Anesthesia Started",
+                            "Status": "Start",
+                            "Timestamp": "2017-04-13 09:15"
+                        },
+                        {
+                            "Name": "Anesthesia Ready",
+                            "Status": "Complete",
+                            "Timestamp": "2017-04-13 11:30"
                         }
                     ],
                     "EMS": [
                         {
-                            "Name": "Room Ready EMS",
+                            "Name": "Room Ready - EMS",
                             "Status": "Complete",
-                            "Timestamp": "2017-05-19 08:38"
+                            "Timestamp": "2017-04-13 10:35"
                         }
                     ]
-                }
-            },
-            {
-                "Name": "Jos, A",
-                "ProcName": "UFE (Uterine Fibroid Embolization)",
-                "OR": "OR2",
-                "Case": "4,5",
-                "Specialty": "",
-                "Status": "",
-                "SchStartTime": "13:00",
-                "SchEndTime": "",
-                "Parent": [
-                    "Preop",
-                    "IntraOp",
-                    "Recovery"
-                ],
-                "roles": [],
-                "stageupdates": [
-                    {
-                        "ObjectId": 338,
-                        "Name": "Preop Arrived",
-                        "Parent": "Preop",
-                        "TimeStamp": "2017-05-19 15:06",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Start"
-                    },
-                    {
-                        "ObjectId": 358,
-                        "Name": "Preop Complete",
-                        "Parent": "Preop",
-                        "TimeStamp": "2017-05-19 15:06",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Complete"
-                    },
-                    {
-                        "ObjectId": 478,
-                        "Name": "Room Ready EMS",
-                        "Parent": "IntraOp",
-                        "TimeStamp": "2017-05-19 08:35",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Complete"
-                    },
-                    {
-                        "ObjectId": 340,
-                        "Name": "Patient In-Room",
-                        "Parent": "IntraOp",
-                        "TimeStamp": "2017-05-19 08:35",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Start"
-                    },
-                    {
-                        "ObjectId": 483,
-                        "Name": "Surgeon In Room",
-                        "Parent": "IntraOp",
-                        "TimeStamp": "2017-05-19 08:35",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Start"
-                    },
-                    {
-                        "ObjectId": 486,
-                        "Name": "Timeout",
-                        "Parent": "IntraOp",
-                        "TimeStamp": "2017-05-19 08:35",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Complete"
-                    },
-                    {
-                        "ObjectId": 422,
-                        "Name": "Procedure Started",
-                        "Parent": "IntraOp",
-                        "TimeStamp": "2017-05-19 08:35",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Start"
-                    },
-                    {
-                        "ObjectId": 347,
-                        "Name": "Wheels Out",
-                        "Parent": "IntraOp",
-                        "TimeStamp": "2017-05-19 08:35",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Complete"
-                    },
-                    {
-                        "ObjectId": 348,
-                        "Name": "Patient Arrived",
-                        "Parent": "Recovery",
-                        "TimeStamp": "2017-05-19 15:09",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Start"
-                    },
-                    {
-                        "ObjectId": 350,
-                        "Name": "Patient Discharge",
-                        "Parent": "Recovery",
-                        "TimeStamp": "2017-05-19 15:09",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Complete"
-                    }
-                ],
-                "delayReasons": [],
-                "cancelDetails": [],
-                "cancelReasons": [],
-                "summary": {
-                    "PatientSummary": [
-                        {
-                            "Name": "Patient In-Room",
-                            "Status": "Start",
-                            "Timestamp": "2017-05-19 08:35"
-                        },
-                        {
-                            "Name": "Timeout",
-                            "Status": "Complete",
-                            "Timestamp": "2017-05-19 08:35"
-                        },
-                        {
-                            "Name": "Patient Discharge",
-                            "Status": "Complete",
-                            "Timestamp": "2017-05-19 15:09"
-                        }
-                    ],
-                    "Nursing": [
-                        {
-                            "Name": "Preop Arrived",
-                            "Status": "Start",
-                            "Timestamp": "2017-05-19 15:06"
-                        },
-                        {
-                            "Name": "Preop Complete",
-                            "Status": "Complete",
-                            "Timestamp": "2017-05-19 15:06"
-                        },
-                        {
-                            "Name": "Wheels Out",
-                            "Status": "Complete",
-                            "Timestamp": "2017-05-19 08:35"
-                        },
-                        {
-                            "Name": "Patient Arrived",
-                            "Status": "Start",
-                            "Timestamp": "2017-05-19 15:09"
-                        },
-                        {
-                            "Name": "Patient Discharge",
-                            "Status": "Complete",
-                            "Timestamp": "2017-05-19 15:09"
-                        }
-                    ],
-                    "Surgeon": [
-                        {
-                            "Name": "Surgeon In Room",
-                            "Status": "Start",
-                            "Timestamp": "2017-05-19 08:35"
-                        },
-                        {
-                            "Name": "Procedure Started",
-                            "Status": "Start",
-                            "Timestamp": "2017-05-19 08:35"
-                        }
-                    ],
-                    "Anesthesia": [],
-                    "EMS": [
-                        {
-                            "Name": "Room Ready EMS",
-                            "Status": "Complete",
-                            "Timestamp": "2017-05-19 08:35"
-                        }
-                    ]
-                }
-            },
-            {
-                "Name": "John",
-                "ProcName": "General",
-                "OR": "OR1",
-                "Case": "347",
-                "Specialty": "",
-                "Status": "",
-                "SchStartTime": "13:00",
-                "SchEndTime": "",
-                "Parent": [
-                    "Preop",
-                    "IntraOp",
-                    "Recovery"
-                ],
-                "roles": [],
-                "stageupdates": [
-                    {
-                        "ObjectId": 338,
-                        "Name": "Preop Arrived",
-                        "Parent": "Preop",
-                        "TimeStamp": "2017-05-19 15:05",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Start"
-                    },
-                    {
-                        "ObjectId": 358,
-                        "Name": "Preop Complete",
-                        "Parent": "Preop",
-                        "TimeStamp": "2017-05-19 15:05",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Complete"
-                    },
-                    {
-                        "ObjectId": 461,
-                        "Name": "Nerve Block",
-                        "Parent": "IntraOp",
-                        "TimeStamp": "2017-05-19 08:37",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Complete"
-                    },
-                    {
-                        "ObjectId": 340,
-                        "Name": "Patient In-Room",
-                        "Parent": "IntraOp",
-                        "TimeStamp": "2017-05-19 08:37",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Start"
-                    },
-                    {
-                        "ObjectId": 483,
-                        "Name": "Surgeon In Room",
-                        "Parent": "IntraOp",
-                        "TimeStamp": "2017-05-19 08:37",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Start"
-                    },
-                    {
-                        "ObjectId": 342,
-                        "Name": "Sedation",
-                        "Parent": "IntraOp",
-                        "TimeStamp": "2017-05-19 08:37",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Complete"
-                    },
-                    {
-                        "ObjectId": 486,
-                        "Name": "Timeout",
-                        "Parent": "IntraOp",
-                        "TimeStamp": "2017-05-19 08:37",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Complete"
-                    },
-                    {
-                        "ObjectId": 422,
-                        "Name": "Procedure Started",
-                        "Parent": "IntraOp",
-                        "TimeStamp": "2017-05-19 08:37",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Start"
-                    },
-                    {
-                        "ObjectId": 347,
-                        "Name": "Wheels Out",
-                        "Parent": "IntraOp",
-                        "TimeStamp": "2017-05-19 08:37",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Complete"
-                    },
-                    {
-                        "ObjectId": 348,
-                        "Name": "Patient Arrived",
-                        "Parent": "Recovery",
-                        "TimeStamp": "2017-05-19 15:09",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Start"
-                    },
-                    {
-                        "ObjectId": 350,
-                        "Name": "Patient Discharge",
-                        "Parent": "Recovery",
-                        "TimeStamp": "2017-05-19 15:09",
-                        "UpdateBy": "VADevadmin",
-                        "Status": "Complete"
-                    }
-                ],
-                "delayReasons": [],
-                "cancelDetails": [
-                    {
-                        "UpdateBy": "VADevadmin",
-                        "TimeStamp": "2017-01-20 00:40"
-                    }
-                ],
-                "cancelReasons": [],
-                "summary": {
-                    "PatientSummary": [
-                        {
-                            "Name": "Patient In-Room",
-                            "Status": "Start",
-                            "Timestamp": "2017-05-19 08:37"
-                        },
-                        {
-                            "Name": "Timeout",
-                            "Status": "Complete",
-                            "Timestamp": "2017-05-19 08:37"
-                        },
-                        {
-                            "Name": "Patient Discharge",
-                            "Status": "Complete",
-                            "Timestamp": "2017-05-19 15:09"
-                        }
-                    ],
-                    "Nursing": [
-                        {
-                            "Name": "Preop Arrived",
-                            "Status": "Start",
-                            "Timestamp": "2017-05-19 15:05"
-                        },
-                        {
-                            "Name": "Preop Complete",
-                            "Status": "Complete",
-                            "Timestamp": "2017-05-19 15:05"
-                        },
-                        {
-                            "Name": "Wheels Out",
-                            "Status": "Complete",
-                            "Timestamp": "2017-05-19 08:37"
-                        },
-                        {
-                            "Name": "Patient Arrived",
-                            "Status": "Start",
-                            "Timestamp": "2017-05-19 15:09"
-                        },
-                        {
-                            "Name": "Patient Discharge",
-                            "Status": "Complete",
-                            "Timestamp": "2017-05-19 15:09"
-                        }
-                    ],
-                    "Surgeon": [
-                        {
-                            "Name": "Surgeon In Room",
-                            "Status": "Start",
-                            "Timestamp": "2017-05-19 08:37"
-                        },
-                        {
-                            "Name": "Procedure Started",
-                            "Status": "Start",
-                            "Timestamp": "2017-05-19 08:37"
-                        }
-                    ],
-                    "Anesthesia": [
-                        {
-                            "Name": "Nerve Block",
-                            "Status": "Complete",
-                            "Timestamp": "2017-05-19 08:37"
-                        },
-                        {
-                            "Name": "Sedation",
-                            "Status": "Complete",
-                            "Timestamp": "2017-05-19 08:37"
-                        }
-                    ],
-                    "EMS": []
                 }
             }
         ]
@@ -643,53 +483,184 @@
         <span class="js-value"></span>
     </div>
 </script>
-<script type="text/html" id="chart-temp">
-    <div>
-        <div>
-            <div class="col-sm-12 js-labels">
+
+<script id="legends-temp" type="text/html">
+    <div class="legends">
+        <div class="clearfix"></div>
+        <h4 class="text-center">Legends</h4>
+        <div class="col-xs-6" style="margin: auto;float: none">
+            <div class="col-xs-6 pull-left">
+                <div><i class="fa-chevron-up fa"></i></div>
+                <div><b>Start</b></div>
             </div>
-            <div class="clearfix"></div>
-                <div style="margin-top: 300px">
-                <div class="js-summary"  style="position: relative"></div>
-            </div>
-        </div>
-        <hr />
-        <div style="break-after: page"></div>
-        <div>
-            <div class="col-sm-12 js-labels">
-            </div>
-            <div class="clearfix"></div>
-            <div style="margin-top: 300px">
-                <div class="js-preop"  style="position: relative"></div>
+            <div class="col-xs-6 pull-right">
+                <div><i class="fa-chevron-down fa"></i></div>
+                <div><b>End</b></div>
             </div>
         </div>
-        <hr />
-        <div style="break-after: page"></div>
-        <div>
-            <div class="col-sm-12 js-labels">
-            </div>
-            <div class="clearfix"></div>
-            <div style="margin-top: 300px">
-                <div class="js-interop"  style="position: relative"></div>
-            </div>
-        </div>
-        <hr />
-        <div style="break-after: page"></div>
-        <div>
-            <div class="col-sm-12 js-labels">
-            </div>
-            <div class="clearfix"></div>
-            <div style="margin-top: 300px">
-                <div class="js-postop"  style="position: relative"></div>
-            </div>
-        </div>
-        <hr />
-        <div style="break-after: page"></div>
     </div>
 </script>
 
-<div class="js-charts-container">
+<script type="text/html" id="chart-temp">
+    <div class="js-patient-chart">
+        <div>
+            <div class="js-chart-section chart-section">
+                <div class="col-sm-12 js-labels">
+                </div>
+                <div class="clearfix"></div>
+                <h3 class="text-center">Summary View of Timestamps</h3>
+                <div style="margin-top: 50px">
+                    <div class="js-summary js-vs-chart"  style="position: relative"></div>
+                </div>
+            </div>
+            <div style="margin-top: 10px" class="text-center">
+                <div class="js-show-detail btn btn-primary" data-val="all">Show Details</div>
+            </div>
+            <hr />
+        </div>
+        <div class="print-page-break"></div>
+        <div class="hidden" data-show="all">
+            <div  class="js-chart-section chart-section">
+                <div class="col-sm-12 js-labels">
+                </div>
+                <div class="clearfix"></div>
+                <h3 class="text-center">PreOp Timestamps</h3>
+                <div style="margin-top: 50px">
+                    <div class="js-preop js-vs-chart"  style="position: relative"></div>
+                </div>
+                <div>
+                    <b>Status: </b><span class="js-status"></span>
+                    <div class="js-lst" data-prop="delayReasons">
+                        <h4 class="text-center">Delay Reasons</h4>
+                        <ol>
 
+                        </ol>
+                    </div>
+                    <div class="js-lst" data-prop="cancelReasons">
+                        <h4 class="text-center">Cancel Reasons</h4>
+                        <ol>
+
+                        </ol>
+                    </div>
+                    <div class="js-lst" data-prop="cancelDetails">
+                        <h4 class="text-center">Cancel Details</h4>
+                        <ol>
+
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <hr />
+        </div>
+        <div class="print-page-break"></div>
+        <div class="hidden" data-show="all">
+            <div class="js-chart-section chart-section">
+                <div class="col-sm-12 js-labels">
+                </div>
+                <div class="clearfix"></div>
+                <h3 class="text-center">IntraOp Timestamps</h3>
+                <div style="margin-top: 50px">
+                    <div class="js-interop js-vs-chart"  style="position: relative"></div>
+                </div>
+                <div>
+                    <b>Status: </b><span class="js-status"></span>
+                    <div class="js-lst" data-prop="delayReasons">
+                        <h4 class="text-center">Delay Reasons</h4>
+                        <ol>
+
+                        </ol>
+                    </div>
+                    <div class="js-lst" data-prop="cancelReasons">
+                        <h4 class="text-center">Cancel Reasons</h4>
+                        <ol>
+
+                        </ol>
+                    </div>
+                    <div class="js-lst" data-prop="cancelDetails">
+                        <h4 class="text-center">Cancel Details</h4>
+                        <ol>
+
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <hr />
+        </div>
+        <div class="print-page-break"></div>
+        <div class="hidden" data-show="all">
+            <div  class="js-chart-section chart-section">
+                <div class="col-sm-12 js-labels">
+                </div>
+                <div class="clearfix"></div>
+                <h3 class="text-center">PostOp Timestamps</h3>
+                <div style="margin-top: 50px">
+                    <div class="js-postop js-vs-chart"  style="position: relative"></div>
+                </div>
+                <div>
+                    <b>Status: </b><span class="js-status"></span>
+                    <div class="js-lst" data-prop="delayReasons">
+                        <h4 class="text-center">Delay Reasons</h4>
+                        <ol>
+
+                        </ol>
+                    </div>
+                    <div class="js-lst" data-prop="cancelReasons">
+                        <h4 class="text-center">Cancel Reasons</h4>
+                        <ol>
+
+                        </ol>
+                    </div>
+                    <div class="js-lst" data-prop="cancelDetails">
+                        <h4 class="text-center">Cancel Details</h4>
+                        <ol>
+
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <hr />
+        </div>
+        <div class="print-page-break"></div>
+    </div>
+</script>
+
+<div>
+    <div class="header row">
+        <div class="col-xs-3">
+            <img src="" id="left-header-img" style="width: 100%" />
+        </div>
+        <div class="col-xs-6 text-center">
+            <h3>OR Operations Report - <date id="reportDate" runat="server">1321</date></h3>
+        </div>
+        <div class="col-xs-3">
+            <img src="" id="right-header-img" style="width: 100%" />
+        </div>
+    </div>
+    <div style="font-size: 16px;" class="row">
+        <div class="col-xs-2"></div>
+        <div class="col-xs-8">
+            <div class="col-xs-4">
+                <label>Scheduled Cases: </label>
+                <span class="js-scheduled-cases"></span>
+            </div>
+            <div class="col-xs-4">
+                <label>Completed Cases: </label>
+                <span class="js-completed-cases"></span>
+            </div>
+            <div class="col-xs-4">
+                <label>On time starts: </label>
+                <span class="js-ontime"></span>
+            </div>
+        </div>
+        <div class="col-xs-2"></div>
+    </div>
+
+    <img src="" id="scrshot" style="width: 100%" />
+</div>
+<hr />
+<div class="print-page-break"></div>
+
+<div class="js-charts-container">
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
