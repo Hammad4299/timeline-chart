@@ -104,7 +104,7 @@ Timeline.prototype.showFixedText = function () {
         var left2 = self.getLabelLeft(it2.id);
         var text = moment.duration(it2.toShow.clone().diff(it1.toShow,'minutes'),'minutes').format('HH:mm');
 
-        this.displayTextLabel((left1+left2)/2, text, it1.className);
+        this.displayTextLabel((left1+left2)/2, text, it1.className+' fixed');
     }
 };
 
@@ -114,7 +114,6 @@ Timeline.prototype.clearLabels = function () {
 }
 
 Timeline.prototype.displayTextLabel = function (left, text, className) {
-    return;
     var self = this;
     var maxind = 0;
     left = Math.floor(left);
@@ -166,7 +165,7 @@ Timeline.prototype.setItems = function (items) {
         //if(!nItem.id)
             nItem.id = self.items.length;
 
-        if(item.group === undefined){
+        if(item.group === undefined && !item.className){
             nItem.className = "pallete-color-"+Math.floor(((Math.random()*100)%5)+1);
         }
 
@@ -287,7 +286,7 @@ Timeline.prototype.getOptions = function () {
     };
 }
 
-Timeline.prototype.draw = function (dont) {
+Timeline.prototype.draw = function () {
     if(this.timeline)
         this.timeline.destroy();
     var that = this;
@@ -315,18 +314,16 @@ Timeline.prototype.draw = function (dont) {
     var items = new vis.DataSet(its);
     _this.timeline = new vis.Timeline(_this.container, items,g,options);
     _this.timeline.on('changed',function () {
-        _this.clearLabels();
         setTimeout(function () {
-            its.map(function (item) {
-                if(item.toShow)
-                    _this.showTimeLabels(item.toShow.format('HH:mm'),item);
-            });
-
+            _this.clearLabels();
+            // its.map(function (item) {
+            //     if(item.toShow)
+            //         _this.showTimeLabels(item.toShow.format('HH:mm'),item);
+            // });
 
             _this.showFixedText();
+            _this.showTimelineLabels();
         },1000);
-
-        _this.showTimelineLabels();
     })
 }
 
@@ -369,6 +366,11 @@ function setLabels(jsonData, container) {
     });
 
     toAdd.push({
+        Name: "Speciality",
+        Value: jsonData.Specialty
+    });
+
+    toAdd.push({
         Name: "Specialty",
         Value: jsonData.Specialty
     });
@@ -394,7 +396,7 @@ function getData(arr) {
             id: it.ObjectId,
             content: it.Name,
             Status: it.Status,
-            fixed: it.fixed,
+            fixed: it.SqueezeAfter,
             start: moment(moment(it.TimeStamp,'YYYY-MM-DD HH:mm').format('HH:mm'),'HH:mm')
         });
     });
@@ -433,8 +435,12 @@ $(document).ready(function () {
         })
     });
 
+    $(document).on('click','.js-print-page',function () {
+        window.print();
+    })
 
-    var jsonData = JSON.parse($('#jsonData').html());
+
+    var jsonData = JSON.parse($('#hdnJsonReport').val());
     var container = $('.js-charts-container');
     var chartsTemp = $('#chart-temp').html();
     var legends = $('#legends-temp').html();
@@ -454,7 +460,7 @@ $(document).ready(function () {
     initialPage.schCases.text(jsonData.ScheduledCases);
     initialPage.comCases.text(jsonData.CompletedCases);
     initialPage.ontimeCases.text(jsonData.OnTimeStarts);
-    initialPage.scrshot.attr('src',jsonData.scrshot);
+    initialPage.scrshot.attr('src',jsonData.ReportImage);
 
     var i = 0;
     var arr = [];
@@ -526,9 +532,42 @@ $(document).ready(function () {
             id++;
         }
 
+        its.unshift({
+            content: "Scheduled Start Time",
+            Status: "Start",
+            group: 0,
+            className: 'special-box',
+            start: moment(moment(data.SchStartTime,'MM/DD/YYYY hh:mm:ss A').format('HH:mm'),'HH:mm')
+        });
+
+        its.unshift({
+            content: "Scheduled End Time",
+            Status: "End",
+            group: 0,
+            className: 'special-box',
+            start: moment(moment(data.SchEndTime,'MM/DD/YYYY hh:mm:ss A').format('HH:mm'),'HH:mm')
+        });
+
         sumTime.setItems(its);
+        its = getData(data.stages.IntraOp);
+        its.unshift({
+            content: "Scheduled Start Time",
+            Status: "Start",
+            group: 0,
+            className: 'special-box',
+            start: moment(moment(data.SchStartTime,'MM/DD/YYYY hh:mm:ss A').format('HH:mm'),'HH:mm')
+        });
+
+        its.unshift({
+            content: "Scheduled End Time",
+            Status: "End",
+            group: 0,
+            className: 'special-box',
+            start: moment(moment(data.SchEndTime,'MM/DD/YYYY hh:mm:ss A').format('HH:mm'),'HH:mm')
+        });
+
         preTime.setItems(getData(data.stages.PreOp));
-        interTime.setItems(getData(data.stages.IntraOp));
+        interTime.setItems(its);
         postTime.setItems(getData(data.stages.PostOp,'Pre'));
         sumTime.initTimeline();
         preTime.initTimeline();
