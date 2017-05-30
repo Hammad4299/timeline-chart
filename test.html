@@ -16,6 +16,34 @@
             font-weight: bold;
         }
 
+
+        .start-arrow,.start-arrow:before{
+            color: green!important;
+        }
+
+        .complete-arrow,.complete-arrow:before{
+            color: red!important;
+        }
+
+        @media print {
+            *{
+                -webkit-print-color-adjust: exact;
+            }
+
+            .no-print{
+                display: none!important;
+            }
+
+            .vis-item.vis-box{
+                background: #d5ddf6!important;
+            }
+        }
+
+
+        .fixed{
+            text-align: center;
+        }
+
         .vis-item.vis-box.special-box{
             border: #f2db94 solid 2px;
         }
@@ -35,6 +63,7 @@
         .pallete-color-4, .vis-item.vis-box.pallete-color-4 {
             background-color: #76c0ef;
         }
+
         .pallete-color-5, .vis-item.vis-box.pallete-color-5 {
             background-color: #cddbf2;
         }
@@ -84,6 +113,7 @@
       "Status": "",
       "SchStartTime": "4/13/2017 9:00:00 AM",
       "SchEndTime": "4/13/2017 3:00:00 PM",
+      "Explanation": "",
       "Parent": [
         "PreOp",
         "IntraOp",
@@ -493,6 +523,7 @@
       "Status": "",
       "SchStartTime": "4/13/2017 9:00:00 AM",
       "SchEndTime": "4/13/2017 12:00:00 PM",
+      "Explanation": "",
       "Parent": [
         "PreOp",
         "IntraOp",
@@ -853,13 +884,13 @@
         <div class="col-xs-6" style="margin: auto;float: none">
             <div class="col-xs-6 pull-left">
                 <div class="col-xs-4 pull-right text-center">
-                    <div><i class="fa-chevron-up fa"></i></div>
+                    <div><i class="fa-chevron-up fa start-arrow"></i></div>
                     <div><b>Start</b></div>
                 </div>
             </div>
             <div class="col-xs-6 pull-right">
                 <div class="col-xs-4 text-center">
-                    <div><i class="fa-chevron-down fa"></i></div>
+                    <div><i class="fa-chevron-down fa complete-arrow"></i></div>
                     <div><b>Complete</b></div>
                 </div>
             </div>
@@ -880,7 +911,7 @@
                 </div>
             </div>
             <div style="margin-top: 10px" class="text-center">
-                <div class="js-show-detail btn btn-primary" data-val="all">Show Details</div>
+                <div class="js-show-detail no-print btn btn-primary" data-val="all">Show Details</div>
             </div>
             <hr />
         </div>
@@ -1001,7 +1032,7 @@
 </script>
 
 <div class="text-center">
-    <div class="js-print-page btn btn-primary">Print</div>
+    <div class="js-print-page no-print btn btn-primary">Print</div>
 </div>
 
 <div class="js-printable hidden">
@@ -1036,9 +1067,9 @@
     </div>
 
     <img src="" id="scrshot" style="width: 100%" />
+    <div class="print-page-break"></div>
 </div>
 <hr />
-<div class="print-page-break"></div>
 
 <div class="js-charts-container">
 </div>

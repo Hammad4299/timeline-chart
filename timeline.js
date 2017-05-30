@@ -7,8 +7,8 @@ var Timeline = function (container) {
     this.fixedProps = {};
     this.step = 60;
     this.stepLabels = [];
-    this.min = moment('06:00','HH:mm');
-    this.max = moment('20:30','HH:mm');
+    this.min = moment('23:59','HH:mm');
+    this.max = moment('00:01','HH:mm');
     this.timeLabels = [];
 }
 
@@ -19,7 +19,7 @@ Timeline.prototype.addGroup = function (name, id, color) {
     this.groups.push({
         id: id,
         content: name,
-        style: "background-color: "+color
+        style: "background-color: "+color+"!important"
     })
 }
 
@@ -100,20 +100,26 @@ Timeline.prototype.showFixedText = function () {
         var self = this;
         var it1 = this.fixedProps[0];
         var it2 = this.fixedProps[1];
-        var left1 = self.getLabelLeft(it1.id);
-        var left2 = self.getLabelLeft(it2.id);
+        var left1 = self.getLabelLeft(it1.id)+20;
+        var left2 = self.getLabelLeft(it2.id)+20;
         var text = moment.duration(it2.toShow.clone().diff(it1.toShow,'minutes'),'minutes').format('HH:mm');
 
-        this.displayTextLabel((left1+left2)/2, text, it1.className+' fixed');
+        if(left2<left1){
+            var t = left1;
+            left1 = left2;
+            left2 = t;
+        }
+
+        this.displayTextLabel(left1, text, it1.className+' fixed',left2-left1);
     }
 };
 
 Timeline.prototype.clearLabels = function () {
-    $(self.container).find('.tm-time-label').remove();
+    $(this.container).find('.tm-time-label').remove();
     this.timeLabels = {};
 }
 
-Timeline.prototype.displayTextLabel = function (left, text, className) {
+Timeline.prototype.displayTextLabel = function (left, text, className, width) {
     var self = this;
     var maxind = 0;
     left = Math.floor(left);
@@ -136,6 +142,8 @@ Timeline.prototype.displayTextLabel = function (left, text, className) {
     template.css('top',top+'px');
     template.css('position','absolute');
     template.css('left',left+'px');
+    if(width)
+        template.css('width',width+'px');
     template.text(text);
     template.addClass(className);
     $(self.container).append(template);
@@ -157,6 +165,7 @@ Timeline.prototype.setItems = function (items) {
     this.itemsMap = {};
     var insicionFound = false;
 
+
     items.map(function (item) {
         var nItem = {};
         for(var prop in item){
@@ -169,7 +178,23 @@ Timeline.prototype.setItems = function (items) {
             nItem.className = "pallete-color-"+Math.floor(((Math.random()*100)%5)+1);
         }
 
+        if(item.parent){
+            if(!nItem.className)
+                nItem.className = '';
+
+            nItem.className += ' ' + item.parent;
+        }
+
         nItem['toShow'] = item.start;
+
+        if(nItem['toShow'].clone().diff(self.min,'minutes')<0){
+            self.min = nItem['toShow'].clone();
+        }
+
+        if(nItem['toShow'].clone().diff(self.max,'minutes')>0){
+            self.max = nItem['toShow'].clone();
+        }
+
         if(self.fixedProps && self.fixedProps.length==1) {
             self.fixedProps.push(nItem);    //Next to fixed one.
         }
@@ -182,6 +207,11 @@ Timeline.prototype.setItems = function (items) {
         self.items.push(nItem);
         self.itemsMap[nItem.id] = nItem;
     });
+
+    self.min = self.min.startOf('hour').add('-1','hour');
+    self.max = self.max.endOf('hour').add('1','hour');
+
+    console.log(self.min.format('HH:mm'));
 };
 
 Timeline.prototype.resolveScaledTime = function (time) {
@@ -266,7 +296,8 @@ Timeline.prototype.getOptions = function () {
             if(item.toShow)
                 t = item.toShow.format('HH:mm');
 
-            var html = '<div class="vis-item-content '+item.className+'">' +
+            var classN = item.className;
+            var html = '<div class="vis-item-content '+classN+'">' +
                             '<i class="fa"></i>' +
                             '<span>'+item.content+'</span>' +
                             '<div><small><b>'+t+'</b></small></div>'+
@@ -276,8 +307,10 @@ Timeline.prototype.getOptions = function () {
             if(item.type!='background'){
                 if(item.Status == "Start"){
                     h.find('.fa').addClass('fa-chevron-up');
+                    h.find('.fa').addClass('start-arrow');
                 }else{
                     h.find('.fa').addClass('fa-chevron-down');
+                    h.find('.fa').addClass('complete-arrow');
                 }
             }
 
@@ -314,6 +347,7 @@ Timeline.prototype.draw = function () {
     var items = new vis.DataSet(its);
     _this.timeline = new vis.Timeline(_this.container, items,g,options);
     _this.timeline.on('changed',function () {
+
         setTimeout(function () {
             _this.clearLabels();
             // its.map(function (item) {
@@ -395,6 +429,7 @@ function getData(arr) {
         data.push({
             id: it.ObjectId,
             content: it.Name,
+            parent: it.Parent,
             Status: it.Status,
             fixed: it.SqueezeAfter,
             start: moment(moment(it.TimeStamp,'YYYY-MM-DD HH:mm').format('HH:mm'),'HH:mm')
@@ -506,7 +541,7 @@ $(document).ready(function () {
         var its = [];
         for(var prop in patient.summary){
             var color = "";
-            if(prop == 'PatientSummary'){
+            if(prop == 'Patient'){
                 color = jsonData.Palette.Patient;
             }else if(prop == 'Nursing'){
                 color = jsonData.Palette.Nursing;
