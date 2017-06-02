@@ -7,8 +7,8 @@ var Timeline = function (container) {
     this.fixedProps = {};
     this.step = 60;
     this.stepLabels = [];
-    this.min = moment('23:59','HH:mm');
-    this.max = moment('00:01','HH:mm');
+    this.min = moment('00:00','HH:mm');
+    this.max = moment('23:59','HH:mm');
     this.timeLabels = [];
 }
 
@@ -44,9 +44,9 @@ Timeline.prototype.initTimeline = function () {
     var self = this;
     var startDate = self.min;
     this.timeLabels = [];
-    var steps = Math.floor(self.max.diff(startDate,'minutes')/self.step)+1;
+    var steps = Math.ceil(self.max.diff(startDate,'minutes')/self.step)+1;
 
-    for(var x=0;x<steps;++x) {
+    for(var x=0;x<=steps;++x) {
         var date = startDate.clone().add(x*self.step,'minutes');
         var sDate = date.clone();
         var obj  = {
@@ -69,26 +69,29 @@ Timeline.prototype.initTimeline = function () {
             if(cStep==fixedStartStep+1){ //Before fixed
                 obj.start = self.fixedProps[0].toShow;
                 if(self.stepLabels.length>0){
-                    self.stepLabels[self.stepLabels.length-1].end = obj.start;
+                    self.stepLabels[self.stepLabels.length-1].end = obj.start.clone();
                 }
 
                 obj.end = obj.start;
-            //}
-            // else if(cStep == fixedStartStep+2){//>fixedStartStep && cStep<=fixedEndStep) {
-            //     obj.start = undefined;
-            //     obj.end = self.fixedProps[1].toShow;
             } else if(cStep == fixedStartStep+2) {
-                obj.start  = self.fixedProps[1].toShow;
-            } else if (cStep > fixedEndStep){
-                var e = self.stepLabels[self.stepLabels.length-1].start;
-                var s = self.timeStep(e,'minutes');
-
-                var d = self.min.clone().add((s+1)*self.step,'minutes');
-                obj.start = d;
-
-                if(cStep == fixedStartStep+3){
-                    self.stepLabels[self.stepLabels.length-1].end = obj.start;
+                obj.start = null;
+                obj.s = self.fixedProps[1].toShow;
+                obj.end = self.fixedProps[1].toShow;
+            } else if(cStep == fixedStartStep+3) {
+                var pre = null;
+                if(self.stepLabels.length>0){
+                    pre = self.stepLabels[self.stepLabels.length-3];
                 }
+                var toSet = self.fixedProps[1].toShow.clone().startOf('hour');
+                if(!pre || pre.start.clone().diff(toSet,'minutes')<0)
+                    obj.start = toSet;
+                else
+                    obj.start = self.fixedProps[1].toShow.clone().endOf('hour').add(1,'minute');
+                obj.end = obj.start.clone().add(self.step,'minute');
+            }
+            else if (cStep > fixedStartStep+3){
+                obj.start = self.stepLabels[self.stepLabels.length-1].end.clone();
+                obj.end = obj.start.clone().add(self.step,'minute');
             }
         }
 
@@ -222,14 +225,6 @@ Timeline.prototype.setItems = function (items) {
             nItem.title += "<div><b>Timestamp</b>: "+item.timestamp+"<div>";
         }
 
-        if(nItem['toShow'].clone().diff(self.min,'minutes')<0){
-            self.min = nItem['toShow'].clone();
-        }
-
-        if(nItem['toShow'].clone().diff(self.max,'minutes')>0){
-            self.max = nItem['toShow'].clone();
-        }
-
         if(self.fixedProps && self.fixedProps.length==1) {
             nItem.group = 122;
             self.fixedProps.push(nItem);    //Next to fixed one.
@@ -246,8 +241,8 @@ Timeline.prototype.setItems = function (items) {
         self.items.push(nItem);
     });
 
-    self.min = self.min.startOf('hour').clone().add('-1','hour');
-    self.max = self.max.endOf('hour').clone().add('1','hour');
+
+
 };
 
 Timeline.prototype.resolveScaledTime = function (time) {
@@ -272,18 +267,68 @@ Timeline.prototype.resolveScaledTime = function (time) {
 
     if(start){
         var len = start.end.clone().diff(start.s,'minutes');
-        var scale = Math.ceil(self.step/len);
+        var scale = len/self.step;
         var d = time.clone().diff(start.s,'minutes');
         toRet = start.actual.clone().add(d/scale,'minutes');
     }
     return toRet;
 }
 
+Timeline.prototype.trim = function () {
+    var minIndex = 1232;
+    var maxIndex = -1;
+    var min = moment('23:59','HH:mm');
+    var max = moment('00:00','HH:mm');
+    this.items.map(function (item) {
+        if(item.toShow.clone().diff(min,'minutes')<0){
+            min = item.toShow.clone();
+        }
+
+        if(item.toShow.clone().diff(max,'minutes')>0){
+            max = item.toShow.clone();
+        }
+    })
+
+    min = min.startOf('hour').clone().add('-1','hour');
+    max = max.endOf('hour').add(1,'minute').add('1','hour');
+
+    for(var x=0;x<this.stepLabels.length;++x){
+        var it = this.stepLabels[x];
+        if(it.s){
+            var diff = it.s.clone().diff(min,'minutes');
+            var diff2 = it.s.clone().diff(max,'minutes');
+            if(diff>=0 && diff2<=0){
+                if(x<minIndex){
+                    minIndex = x;
+                }
+
+                if(x>maxIndex){
+                    maxIndex = x;
+                }
+            }
+        }
+    }
+
+    this.stepLabels = this.stepLabels.slice(minIndex,maxIndex+1);
+    this.min = this.stepLabels[0].actual;
+    this.max = this.stepLabels[this.stepLabels.length-1].actual;
+}
+
 Timeline.prototype.prepare = function () {
     var self = this;
+    var _this = this;
+    self.trim();
+
     this.items.map(function (item) {
         item.start = self.resolveScaledTime(item.start);
     });
+
+    if(!_this.groups || _this.groups.length==0){
+        _this.addGroup('',122);
+        _this.addGroup('',111);
+    }else{
+        _this.addGroup('',122,_this.fixedProps[0].color);
+    }
 }
 
 Timeline.prototype.showTimelineLabels = function () {
@@ -365,17 +410,6 @@ Timeline.prototype.draw = function () {
     var options = this.getOptions();
     var g = null;
     var its = _this.items.slice();
-
-    if(!this.drawCalled){
-        if(!_this.groups || _this.groups.length==0){
-            _this.addGroup('',122);
-            _this.addGroup('',111);
-        }else{
-            _this.addGroup('',122,_this.fixedProps[0].color);
-        }
-    }
-
-    this.drawCalled = true;
 
     if(_this.groups){
         g = _this.groups.slice();
