@@ -2,7 +2,7 @@
 var Timeline = function (container) {
     this.container = container;
     this.items = [];
-    this.itemsMap = null;
+    this.drawCalled = false;
     this.groups = undefined;
     this.fixedProps = {};
     this.step = 60;
@@ -13,12 +13,21 @@ var Timeline = function (container) {
 }
 
 Timeline.prototype.addGroup = function (name, id, color) {
+    var order = {
+        'Patient': 0,
+        'Nursing': 1,
+        'Surgeon': 2,
+        '': 3,
+        'Anesthesia': 4,
+        'EMS': 5
+    };
     if(!this.groups)
         this.groups = [];
 
     this.groups.push({
         id: id,
         content: name,
+        order: order[name],
         style: "background-color: "+color+"!important"
     })
 }
@@ -91,8 +100,8 @@ Timeline.prototype.initTimeline = function () {
 }
 
 Timeline.prototype.showTimeLabels = function (text, item) {
-    var self = this;
-    this.displayTextLabel(self.getLabelLeft(item.id),text,item.className);
+    // var self = this;
+    // this.displayTextLabel(self.getLabelLeft(item.id),text,item.className);
 };
 
 Timeline.prototype.showFixedText = function () {
@@ -100,17 +109,24 @@ Timeline.prototype.showFixedText = function () {
         var self = this;
         var it1 = this.fixedProps[0];
         var it2 = this.fixedProps[1];
-        var left1 = self.getLabelLeft(it1.id)+20;
-        var left2 = self.getLabelLeft(it2.id)+20;
+        var dimens1 = self.dimens(it1.id);
+        var dimens2 = self.dimens(it2.id);
         var text = moment.duration(it2.toShow.clone().diff(it1.toShow,'minutes'),'minutes').format('HH:mm');
 
-        if(left2<left1){
-            var t = left1;
-            left1 = left2;
-            left2 = t;
-        }
+        var toAdd = $("<div></div>");
+        toAdd.css('left',(dimens1.right+10)+'px');
+        toAdd.css('width',(dimens2.left - (dimens1.right+10))+'px');
+        toAdd.css('height','1px');
+        toAdd.css('z-index','3');
+        if(it1.group!==undefined)
+            toAdd.css('border','2px #000000 dashed');
+        else
+            toAdd.css('border','2px '+it1.color + ' dashed');
+        toAdd.css('position','absolute');
+        toAdd.css('top',((dimens1.top+dimens1.bottom)/2)+'px');
+        toAdd.addClass('tm-time-label');
 
-        this.displayTextLabel(left1, text, it1.className+' fixed',left2-left1);
+        dimens1.parent.append(toAdd);
     }
 };
 
@@ -119,7 +135,7 @@ Timeline.prototype.clearLabels = function () {
     this.timeLabels = {};
 }
 
-Timeline.prototype.displayTextLabel = function (left, text, className, width) {
+Timeline.prototype.displayTextLabel = function (left, text, className) {
     var self = this;
     var maxind = 0;
     left = Math.floor(left);
@@ -142,27 +158,42 @@ Timeline.prototype.displayTextLabel = function (left, text, className, width) {
     template.css('top',top+'px');
     template.css('position','absolute');
     template.css('left',left+'px');
-    if(width)
-        template.css('width',width+'px');
     template.text(text);
     template.addClass(className);
-    $(self.container).append(template);
+    left.dimens.parent.append(template);
 }
 
 Timeline.prototype.getLabelLeft = function (itemId) {
+    var dimens = this.dimens(itemId);
+    var center = (dimens.left+dimens.right)/2;
+    return {dimes: dimens,val : center-20};
+}
+
+Timeline.prototype.dimens = function (itemId) {
     var it = $(this.container).find('[data-id='+itemId+']');
     var left=  parseInt(it.css('left'));
-    left += parseInt($(this.container).find('[data-id='+itemId+']').parents('.vis-panel').css('left'));
+    //left += parseInt($(this.container).find('[data-id='+itemId+']').parents('.vis-panel').css('left'));
     var width = it.width();
     var right = left+width;
-    var center = (left+right)/2;
-    return center-20;
+    var top = parseInt(it.css('top'));
+    var height = it.height();
+    var bottom = top+height;
+
+
+    return {
+        parent: it.parent(),
+        left: left,
+        right: right,
+        top: top,
+        bottom: bottom,
+        width: width,
+        height: height
+    };
 }
 
 Timeline.prototype.setItems = function (items) {
     var self = this;
     this.items = [];
-    this.itemsMap = {};
     var insicionFound = false;
 
 
@@ -174,9 +205,8 @@ Timeline.prototype.setItems = function (items) {
         //if(!nItem.id)
             nItem.id = self.items.length;
 
-        if(item.group === undefined && !item.className){
-            nItem.className = "pallete-color-"+Math.floor(((Math.random()*100)%5)+1);
-        }
+        if(item.color && item.group === undefined)  //Not summary
+            nItem.style = "background-color: "+item.color;
 
         if(item.parent){
             if(!nItem.className)
@@ -187,6 +217,11 @@ Timeline.prototype.setItems = function (items) {
 
         nItem['toShow'] = item.start;
 
+        if(item.timestamp){
+            nItem.title = "<div><b>Updated By</b>: "+item.updatedBy+"<div>";
+            nItem.title += "<div><b>Timestamp</b>: "+item.timestamp+"<div>";
+        }
+
         if(nItem['toShow'].clone().diff(self.min,'minutes')<0){
             self.min = nItem['toShow'].clone();
         }
@@ -196,22 +231,23 @@ Timeline.prototype.setItems = function (items) {
         }
 
         if(self.fixedProps && self.fixedProps.length==1) {
+            nItem.group = 122;
             self.fixedProps.push(nItem);    //Next to fixed one.
         }
 
         if(!insicionFound && item.fixed){
             insicionFound = true;
+            nItem.group = 122;
             self.fixedProps = [nItem];
         }
 
+        if(nItem.group===undefined)
+            nItem.group = 111;
         self.items.push(nItem);
-        self.itemsMap[nItem.id] = nItem;
     });
 
-    self.min = self.min.startOf('hour').add('-1','hour');
-    self.max = self.max.endOf('hour').add('1','hour');
-
-    console.log(self.min.format('HH:mm'));
+    self.min = self.min.startOf('hour').clone().add('-1','hour');
+    self.max = self.max.endOf('hour').clone().add('1','hour');
 };
 
 Timeline.prototype.resolveScaledTime = function (time) {
@@ -330,6 +366,17 @@ Timeline.prototype.draw = function () {
     var g = null;
     var its = _this.items.slice();
 
+    if(!this.drawCalled){
+        if(!_this.groups || _this.groups.length==0){
+            _this.addGroup('',122);
+            _this.addGroup('',111);
+        }else{
+            _this.addGroup('',122,_this.fixedProps[0].color);
+        }
+    }
+
+    this.drawCalled = true;
+
     if(_this.groups){
         g = _this.groups.slice();
         g.map(function (it) {
@@ -363,7 +410,7 @@ Timeline.prototype.draw = function () {
 
 function setLabels(jsonData, container) {
     var temp = $('#labelHtml').html();
-    var insIn = container.parents('.js-chart-section').find('.js-labels');
+    var insIn = container.parents('.js-chart-section').find('.js-labels-cont');
 
 
 
@@ -379,7 +426,7 @@ function setLabels(jsonData, container) {
     });
 
     toAdd.push({
-        Name: "OR#",
+        Name: "OR #",
         Value: jsonData.OR
     });
 
@@ -404,26 +451,29 @@ function setLabels(jsonData, container) {
         Value: jsonData.Specialty
     });
 
-    toAdd.push({
-        Name: "Specialty",
-        Value: jsonData.Specialty
-    });
-
     var a = jsonData.roles.slice();
     for(var x=toAdd.length-1;x>=0;--x)
         a.unshift(toAdd[x]);
 
     a.map(function (it) {
-        var toAdd = $(temp);
+        var elem = insIn.find('[data-name="'+it.Name+'"]');
+        var found = elem.length>0;
+        var toAdd = elem;
+        if(!found){
+            toAdd = $(temp);
+        }
+
         if(it.Value!=""){
             toAdd.find('.js-name').text(it.Name);
             toAdd.find('.js-value').text(it.Value);
-            insIn.append(toAdd);
         }
+
+        if(!found)
+            insIn.find('.js-labels').append(toAdd);
     })
 }
 
-function getData(arr) {
+function getData(arr, jsonData) {
     var data = [];
     arr.map(function (it) {
         data.push({
@@ -431,7 +481,10 @@ function getData(arr) {
             content: it.Name,
             parent: it.Parent,
             Status: it.Status,
+            timestamp: it.TimeStamp,
+            updatedBy: it.UpdateBy,
             fixed: it.SqueezeAfter,
+            color: jsonData.Palette[it.Group],
             start: moment(moment(it.TimeStamp,'YYYY-MM-DD HH:mm').format('HH:mm'),'HH:mm')
         });
     });
@@ -468,10 +521,60 @@ $(document).ready(function () {
                 $(this).find('.js-vs-chart').data('tm').draw();
             }
         })
+        $(this).addClass('hidden');
+        $(this).parent().find('.js-hide-detail').removeClass('hidden');
+    });
+
+    $(document).on('click','.js-hide-detail',function () {
+        var val = $(this).attr('data-val');
+        var parent = $('.js-patient-chart');
+        parent.find('[data-show]').each(function () {
+            if($(this).attr('data-show').indexOf(val)!=-1){
+                $(this).addClass('hidden');
+                $(this).find('.js-vs-chart').data('tm').draw();
+            }
+        })
+
+        $(this).addClass('hidden');
+        $(this).parent().find('.js-show-detail').removeClass('hidden');
     });
 
     $(document).on('click','.js-print-page',function () {
-        window.print();
+        var i = 0;
+        var total = $('.js-chart-container').length;
+        $('.js-canvases').html('');
+        alert('Please wait for printing to be ready.')
+        $('.js-chart-container').each(function () {
+            var e = $(this);
+            (function () {
+                var ee = e;
+                if(ee.hasClass('hidden')){
+                    i++;
+                    return;
+                }
+                ee.addClass('capture');
+
+                html2canvas(ee[0],{
+                    onrendered: function(canvas) {
+                        i++;
+                        var img = $("<img />");
+                        img.css('width','100%');
+                        img.css('height','100%');
+                        img.attr('src',canvas.toDataURL());
+                        $('.js-canvases').append(img);
+                        $('.js-canvases').append("<div class='print-page-break'></div>");
+                        ee.removeClass('capture');
+
+                        if(i == total){
+                            setTimeout(function () {
+                                window.print();
+                            },2000);
+                        }
+                    }
+                });
+            })();
+        });
+
     })
 
 
@@ -479,6 +582,7 @@ $(document).ready(function () {
     var container = $('.js-charts-container');
     var chartsTemp = $('#chart-temp').html();
     var legends = $('#legends-temp').html();
+    var labels = $('#labels-html').html();
 
     var initialPage = {
         leftImg: $('#left-header-img'),
@@ -522,10 +626,14 @@ $(document).ready(function () {
         var interop = chartsContainer.find('.js-interop')[0];
         var postop = chartsContainer.find('.js-postop')[0];
         var summary = chartsContainer.find('.js-summary')[0];
-        $(preop).parents('.js-chart-section').append(legends);
-        $(postop).parents('.js-chart-section').append(legends);
-        $(interop).parents('.js-chart-section').append(legends);
-        $(summary).parents('.js-chart-section').append(legends);
+        $(preop).parents('.js-chart-container').find('.js-legends-container').append(legends);
+        $(postop).parents('.js-chart-container').find('.js-legends-container').append(legends);
+        $(interop).parents('.js-chart-container').find('.js-legends-container').append(legends);
+        $(summary).parents('.js-chart-container').find('.js-legends-container').append(legends);
+        $(preop).parents('.js-chart-container').find('.js-labels-container').append(labels);
+        $(postop).parents('.js-chart-container').find('.js-labels-container').append(labels);
+        $(interop).parents('.js-chart-container').find('.js-labels-container').append(labels);
+        $(summary).parents('.js-chart-container').find('.js-labels-container').append(labels);
 
         var sumTime = new Timeline(summary);
         var preTime = new Timeline(preop);
@@ -537,35 +645,25 @@ $(document).ready(function () {
         arr.push(interTime);
         arr.push(postTime);
 
-        var id = 0;
+        var sumIds = {};
         var its = [];
-        for(var prop in patient.summary){
-            var color = "";
-            if(prop == 'Patient'){
-                color = jsonData.Palette.Patient;
-            }else if(prop == 'Nursing'){
-                color = jsonData.Palette.Nursing;
-            }else if(prop == 'EMS'){
-                color = jsonData.Palette.EMS;
-            }else if(prop == 'Anesthesia'){
-                color = jsonData.Palette.Anesthesia;
-            }else if(prop == 'Surgeon'){
-                color = jsonData.Palette.Surgeon;
+        var id = 0;
+        patient.stageupdates.map(function (item) {
+            if(sumIds[item.Group] === undefined){
+                sumIds[item.Group] = id;
+                sumTime.addGroup(item.Group,id,jsonData.Palette[item.Group]);
+                id++;
             }
 
-            sumTime.addGroup(prop,id,color);
-
-            patient.summary[prop].map(function (it) {
-                its.push({
-                    content: it.Name,
-                    Status: it.Status,
-                    group: id,
-                    start: moment(moment(it.Timestamp,'YYYY-MM-DD HH:mm').format('HH:mm'),'HH:mm')
-                })
-            });
-
-            id++;
-        }
+            its.push({
+                content: item.Name,
+                color: jsonData.Palette[item.Group],
+                Status: item.Status,
+                fixed: item.SqueezeAfter,
+                group: sumIds[item.Group],
+                start: moment(moment(item.TimeStamp,'YYYY-MM-DD HH:mm').format('HH:mm'),'HH:mm')
+            })
+        });
 
         its.unshift({
             content: "Scheduled Start Time",
@@ -584,11 +682,10 @@ $(document).ready(function () {
         });
 
         sumTime.setItems(its);
-        its = getData(data.stages.IntraOp);
+        its = getData(data.stages.IntraOp,jsonData);
         its.unshift({
             content: "Scheduled Start Time",
             Status: "Start",
-            group: 0,
             className: 'special-box',
             start: moment(moment(data.SchStartTime,'MM/DD/YYYY hh:mm:ss A').format('HH:mm'),'HH:mm')
         });
@@ -596,14 +693,13 @@ $(document).ready(function () {
         its.unshift({
             content: "Scheduled End Time",
             Status: "End",
-            group: 0,
             className: 'special-box',
             start: moment(moment(data.SchEndTime,'MM/DD/YYYY hh:mm:ss A').format('HH:mm'),'HH:mm')
         });
 
-        preTime.setItems(getData(data.stages.PreOp));
+        preTime.setItems(getData(data.stages.PreOp,jsonData));
         interTime.setItems(its);
-        postTime.setItems(getData(data.stages.PostOp,'Pre'));
+        postTime.setItems(getData(data.stages.PostOp,jsonData));
         sumTime.initTimeline();
         preTime.initTimeline();
         interTime.initTimeline();

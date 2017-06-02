@@ -1,9 +1,26 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>Timeline | Basic demo</title>
+    <title>OR Report</title>
 
     <style type="text/css">
+        /*@page {*/
+            /*size: A4;*/
+        /*}*/
+
+
+        /*@media print {*/
+            /*html, body {*/
+                /*width: 210mm;*/
+                /*height: 297mm;*/
+            /*}*/
+            /*!* ... the rest of the rules ... *!*/
+        /*}*/
+
+        .js-canvases img{
+            max-height: 700px;
+        }
+
         body, html {
             font-family: sans-serif;
         }
@@ -16,6 +33,17 @@
             font-weight: bold;
         }
 
+        .capture .show-detail{
+            display: none!important;
+        }
+
+        .capture .legend-label{
+            display: inline!important;
+        }
+
+        .legend-label{
+            display: none!important;
+        }
 
         .start-arrow,.start-arrow:before{
             color: green!important;
@@ -30,12 +58,18 @@
                 -webkit-print-color-adjust: exact;
             }
 
-            .no-print{
+            .no-print,.chart-container{
                 display: none!important;
             }
 
             .vis-item.vis-box{
                 background: #d5ddf6!important;
+            }
+        }
+
+        @media screen {
+            .only-print{
+                display: none!important;
             }
         }
 
@@ -103,6 +137,13 @@
     "Anesthesia": "#f2db94",
     "Surgeon": "#f7ba7e"
   },
+  "SummaryGroups": [
+    "Patient",
+    "Nursing",
+    "Surgeon",
+    "Anesthesia",
+    "EMS"
+  ],
   "PatientUpdate": [
     {
       "Name": "Nat",
@@ -170,7 +211,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Nursing"
         },
         {
           "ObjectId": 358,
@@ -180,7 +222,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Nursing"
         },
         {
           "ObjectId": 562,
@@ -190,7 +233,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Nursing"
         },
         {
           "ObjectId": 564,
@@ -200,7 +244,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Nursing"
         },
         {
           "ObjectId": 556,
@@ -210,7 +255,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Surgeon"
         },
         {
           "ObjectId": 558,
@@ -220,7 +266,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Surgeon"
         },
         {
           "ObjectId": 559,
@@ -230,7 +277,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Anesthesia"
         },
         {
           "ObjectId": 561,
@@ -240,7 +288,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Anesthesia"
         },
         {
           "ObjectId": 340,
@@ -250,7 +299,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Patient"
         },
         {
           "ObjectId": 486,
@@ -260,7 +310,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Patient"
         },
         {
           "ObjectId": 347,
@@ -270,7 +321,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Nursing"
         },
         {
           "ObjectId": 483,
@@ -280,7 +332,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Surgeon"
         },
         {
           "ObjectId": 422,
@@ -290,7 +343,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
-          "SqueezeAfter": true
+          "SqueezeAfter": true,
+          "Group": "Surgeon"
         },
         {
           "ObjectId": 566,
@@ -300,7 +354,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": true,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Surgeon"
         },
         {
           "ObjectId": 461,
@@ -310,7 +365,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Anesthesia"
         },
         {
           "ObjectId": 565,
@@ -320,7 +376,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Anesthesia"
         },
         {
           "ObjectId": 342,
@@ -330,7 +387,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Anesthesia"
         },
         {
           "ObjectId": 478,
@@ -340,7 +398,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "EMS"
         },
         {
           "ObjectId": 350,
@@ -350,7 +409,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Patient"
         },
         {
           "ObjectId": 348,
@@ -360,17 +420,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
-        },
-        {
-          "ObjectId": 350,
-          "Name": "Patient Discharged",
-          "Parent": "PostOp",
-          "TimeStamp": "2017-04-13 15:10",
-          "UpdateBy": "VADemoadmin",
-          "Status": "Complete",
-          "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Nursing"
         }
       ],
       "delayReasons": [
@@ -395,124 +446,7 @@
           "TimeStamp": "2017-05-23 21:27",
           "Note": "This is a test reason"
         }
-      ],
-      "summary": {
-        "Patient": [
-          {
-            "Name": "Patient In-Room",
-            "Status": "Start",
-            "Timestamp": "2017-04-13 10:50"
-          },
-          {
-            "Name": "Timeout",
-            "Status": "Complete",
-            "Timestamp": "2017-04-13 11:40"
-          },
-          {
-            "Name": "Patient Discharged",
-            "Status": "Complete",
-            "Timestamp": "2017-04-13 15:10"
-          }
-        ],
-        "Nursing": [
-          {
-            "Name": "PreOp Nursing Start",
-            "Status": "Start",
-            "Timestamp": "2017-04-13 09:15"
-          },
-          {
-            "Name": "PreOp Nursing Completed",
-            "Status": "Complete",
-            "Timestamp": "2017-04-13 09:30"
-          },
-          {
-            "Name": "Circulator PreOp Start",
-            "Status": "Start",
-            "Timestamp": "2017-04-13 10:15"
-          },
-          {
-            "Name": "Transport to OR",
-            "Status": "Complete",
-            "Timestamp": "2017-04-13 10:30"
-          },
-          {
-            "Name": "Wheels Out",
-            "Status": "Complete",
-            "Timestamp": "2017-04-13 14:15"
-          },
-          {
-            "Name": "Patient Arrived",
-            "Status": "Start",
-            "Timestamp": "2017-04-13 14:30"
-          },
-          {
-            "Name": "Patient Discharged",
-            "Status": "Complete",
-            "Timestamp": "2017-04-13 15:10"
-          }
-        ],
-        "Surgeon": [
-          {
-            "Name": "Surgeon PreOp Start",
-            "Status": "Start",
-            "Timestamp": "2017-04-13 09:32"
-          },
-          {
-            "Name": "Surgeon PreOp Completed",
-            "Status": "Complete",
-            "Timestamp": "2017-04-13 09:40"
-          },
-          {
-            "Name": "Surgeon In Room",
-            "Status": "Start",
-            "Timestamp": "2017-04-13 11:00"
-          },
-          {
-            "Name": "Incision Time",
-            "Status": "Start",
-            "Timestamp": "2017-04-13 11:50"
-          },
-          {
-            "Name": "Surgery End",
-            "Status": "Complete",
-            "Timestamp": "2017-04-13 14:00"
-          }
-        ],
-        "Anesthesia": [
-          {
-            "Name": "Anesthesia PreOp Start",
-            "Status": "Start",
-            "Timestamp": "2017-04-13 09:50"
-          },
-          {
-            "Name": "Anesthesia PreOp Complete",
-            "Status": "Complete",
-            "Timestamp": "2017-04-13 10:05"
-          },
-          {
-            "Name": "Nerve Block Complete",
-            "Status": "Complete",
-            "Timestamp": "2017-04-13 11:10"
-          },
-          {
-            "Name": "Anesthesia Started",
-            "Status": "Start",
-            "Timestamp": "2017-04-13 09:15"
-          },
-          {
-            "Name": "Anesthesia Ready",
-            "Status": "Complete",
-            "Timestamp": "2017-04-13 11:30"
-          }
-        ],
-        "EMS": [
-          {
-            "Name": "Room Ready - EMS",
-            "Status": "Complete",
-            "Timestamp": "2017-04-13 10:35"
-          }
-        ]
-      }
+      ]
     },
     {
       "Name": "int, M",
@@ -544,7 +478,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Nursing"
         },
         {
           "ObjectId": 358,
@@ -554,7 +489,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Nursing"
         },
         {
           "ObjectId": 562,
@@ -564,7 +500,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Nursing"
         },
         {
           "ObjectId": 564,
@@ -574,7 +511,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Nursing"
         },
         {
           "ObjectId": 556,
@@ -584,7 +522,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Surgeon"
         },
         {
           "ObjectId": 558,
@@ -594,7 +533,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Surgeon"
         },
         {
           "ObjectId": 559,
@@ -604,7 +544,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Anesthesia"
         },
         {
           "ObjectId": 561,
@@ -614,7 +555,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Anesthesia"
         },
         {
           "ObjectId": 340,
@@ -624,7 +566,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Patient"
         },
         {
           "ObjectId": 486,
@@ -634,7 +577,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Patient"
         },
         {
           "ObjectId": 347,
@@ -644,7 +588,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Nursing"
         },
         {
           "ObjectId": 483,
@@ -654,7 +599,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Surgeon"
         },
         {
           "ObjectId": 422,
@@ -664,7 +610,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
-          "SqueezeAfter": true
+          "SqueezeAfter": true,
+          "Group": "Surgeon"
         },
         {
           "ObjectId": 566,
@@ -674,7 +621,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": true,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Surgeon"
         },
         {
           "ObjectId": 461,
@@ -684,7 +632,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Anesthesia"
         },
         {
           "ObjectId": 565,
@@ -694,7 +643,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Anesthesia"
         },
         {
           "ObjectId": 342,
@@ -704,7 +654,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Anesthesia"
         },
         {
           "ObjectId": 478,
@@ -714,7 +665,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "EMS"
         },
         {
           "ObjectId": 350,
@@ -724,7 +676,8 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Patient"
         },
         {
           "ObjectId": 348,
@@ -734,144 +687,18 @@
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
-          "SqueezeAfter": false
-        },
-        {
-          "ObjectId": 350,
-          "Name": "Patient Discharged",
-          "Parent": "PostOp",
-          "TimeStamp": "2017-04-13 15:10",
-          "UpdateBy": "VADemoadmin",
-          "Status": "Complete",
-          "SqueezeBefore": false,
-          "SqueezeAfter": false
+          "SqueezeAfter": false,
+          "Group": "Nursing"
         }
       ],
       "delayReasons": [],
       "cancelDetails": [],
-      "cancelReasons": [],
-      "summary": {
-        "Patient": [
-          {
-            "Name": "Patient In-Room",
-            "Status": "Start",
-            "Timestamp": "2017-04-13 09:00"
-          },
-          {
-            "Name": "Timeout",
-            "Status": "Complete",
-            "Timestamp": "2017-04-13 11:40"
-          },
-          {
-            "Name": "Patient Discharged",
-            "Status": "Complete",
-            "Timestamp": "2017-04-13 15:10"
-          }
-        ],
-        "Nursing": [
-          {
-            "Name": "PreOp Nursing Start",
-            "Status": "Start",
-            "Timestamp": "2017-04-13 09:15"
-          },
-          {
-            "Name": "PreOp Nursing Completed",
-            "Status": "Complete",
-            "Timestamp": "2017-04-13 09:30"
-          },
-          {
-            "Name": "Circulator PreOp Start",
-            "Status": "Start",
-            "Timestamp": "2017-04-13 10:15"
-          },
-          {
-            "Name": "Transport to OR",
-            "Status": "Complete",
-            "Timestamp": "2017-04-13 10:30"
-          },
-          {
-            "Name": "Wheels Out",
-            "Status": "Complete",
-            "Timestamp": "2017-04-13 12:00"
-          },
-          {
-            "Name": "Patient Arrived",
-            "Status": "Start",
-            "Timestamp": "2017-04-13 14:30"
-          },
-          {
-            "Name": "Patient Discharged",
-            "Status": "Complete",
-            "Timestamp": "2017-04-13 15:10"
-          }
-        ],
-        "Surgeon": [
-          {
-            "Name": "Surgeon PreOp Start",
-            "Status": "Start",
-            "Timestamp": "2017-04-13 09:32"
-          },
-          {
-            "Name": "Surgeon PreOp Completed",
-            "Status": "Complete",
-            "Timestamp": "2017-04-13 09:40"
-          },
-          {
-            "Name": "Surgeon In Room",
-            "Status": "Start",
-            "Timestamp": "2017-04-13 11:00"
-          },
-          {
-            "Name": "Incision Time",
-            "Status": "Start",
-            "Timestamp": "2017-04-13 11:50"
-          },
-          {
-            "Name": "Surgery End",
-            "Status": "Complete",
-            "Timestamp": "2017-04-13 14:00"
-          }
-        ],
-        "Anesthesia": [
-          {
-            "Name": "Anesthesia PreOp Start",
-            "Status": "Start",
-            "Timestamp": "2017-04-13 09:50"
-          },
-          {
-            "Name": "Anesthesia PreOp Complete",
-            "Status": "Complete",
-            "Timestamp": "2017-04-13 10:05"
-          },
-          {
-            "Name": "Nerve Block Complete",
-            "Status": "Complete",
-            "Timestamp": "2017-04-13 11:10"
-          },
-          {
-            "Name": "Anesthesia Started",
-            "Status": "Start",
-            "Timestamp": "2017-04-13 09:15"
-          },
-          {
-            "Name": "Anesthesia Ready",
-            "Status": "Complete",
-            "Timestamp": "2017-04-13 11:30"
-          }
-        ],
-        "EMS": [
-          {
-            "Name": "Room Ready - EMS",
-            "Status": "Complete",
-            "Timestamp": "2017-04-13 10:35"
-          }
-        ]
-      }
+      "cancelReasons": []
     }
   ]
 }' id="hdnJsonReport" />
 <script id="labelHtml" type="text/html">
-    <div class="width: 33%;">
+    <div class="js-top-label top-label" style="width: 33.33%;float:left"  data-name="">
         <span><b><span class="js-name"></span>:</b></span>
         <span class="js-value"></span>
     </div>
@@ -880,16 +707,16 @@
 <script id="legends-temp" type="text/html">
     <div class="legends">
         <div class="clearfix"></div>
-        <h4 class="text-center">Legends</h4>
-        <div class="col-xs-6" style="margin: auto;float: none">
-            <div class="col-xs-6 pull-left">
-                <div class="col-xs-4 pull-right text-center">
+        <h4 class="text-center">Legend</h4>
+        <div style="margin: auto;float: none">
+            <div class="col-sm-6 pull-left">
+                <div class="text-center">
                     <div><i class="fa-chevron-up fa start-arrow"></i></div>
                     <div><b>Start</b></div>
                 </div>
             </div>
-            <div class="col-xs-6 pull-right">
-                <div class="col-xs-4 text-center">
+            <div class="col-sm-6 pull-right">
+                <div class="text-center">
                     <div><i class="fa-chevron-down fa complete-arrow"></i></div>
                     <div><b>Complete</b></div>
                 </div>
@@ -898,136 +725,207 @@
     </div>
 </script>
 
+<script type="text/html" id="labels-html">
+    <div class="col-sm-12 js-labels-cont">
+        <div style="width: 33.33%;float:left" class="js-top-label top-label" data-name="Scheduled Date & Time (Start)">
+            <span><b><span class="js-name">Scheduled Date & Time (Start)</span>:</b></span>
+            <span class="js-value"></span>
+        </div>
+        <div style="width: 33.33%;float:left" class="js-top-label top-label" data-name="Speciality">
+            <span><b><span class="js-name">Speciality</span>:</b></span>
+            <span class="js-value"></span>
+        </div>
+        <div style="width: 33.33%;float:left" class="js-top-label top-label" data-name="Preop Nurse">
+            <span><b><span class="js-name">Preop Nurse</span>:</b></span>
+            <span class="js-value"></span>
+        </div>
+        <div style="width: 33.33%;float:left" class="js-top-label top-label" data-name="Scheduled Date & Time (End)">
+            <span><b><span class="js-name">Scheduled Date & Time (End)</span>:</b></span>
+            <span class="js-value"></span>
+        </div>
+        <div style="width: 33.33%;float:left" class="js-top-label top-label" data-name="Surgeon">
+            <span><b><span class="js-name">Surgeon</span>:</b></span>
+            <span class="js-value"></span>
+        </div>
+        <div style="width: 33.33%;float:left" class="js-top-label top-label" data-name="Circulator">
+            <span><b><span class="js-name">Circulator</span>:</b></span>
+            <span class="js-value"></span>
+        </div>
+        <div style="width: 33.33%;float:left" class="js-top-label top-label" data-name="Patient">
+            <span><b><span class="js-name">Patient</span>:</b></span>
+            <span class="js-value"></span>
+        </div>
+        <div style="width: 33.33%;float:left" class="js-top-label top-label" data-name="Anesthesiologist">
+            <span><b><span class="js-name">Anesthesiologist</span>:</b></span>
+            <span class="js-value"></span>
+        </div>
+        <div style="width: 33.33%;float:left" class="js-top-label top-label" data-name="Scrub Tech">
+            <span><b><span class="js-name">Scrub Tech</span>:</b></span>
+            <span class="js-value"></span>
+        </div>
+        <div style="width: 33.33%;float:left" class="js-top-label top-label" data-name="Procedure">
+            <span><b><span class="js-name">Procedure</span>:</b></span>
+            <span class="js-value"></span>
+        </div>
+        <div style="width: 33.33%;float:left" class="js-top-label top-label" data-name="CRNA">
+            <span><b><span class="js-name">CRNA</span>:</b></span>
+            <span class="js-value"></span>
+        </div>
+        <div style="width: 33.33%;float:left" class="js-top-label top-label" data-name="Pacu Nurse">
+            <span><b><span class="js-name">Pacu Nurse</span>:</b></span>
+            <span class="js-value"></span>
+        </div>
+        <div style="width: 33.33%;float:left" class="js-top-label top-label" data-name="OR #">
+            <span><b><span class="js-name">OR #</span>:</b></span>
+            <span class="js-value"></span>
+        </div>
+        <div style="width: 33.33%;float:left" class="js-top-label top-label" data-name="Case #">
+            <span><b><span class="js-name">Case #</span>:</b></span>
+            <span class="js-value"></span>
+        </div>
+        <div class="clearfix"></div>
+        <div class="js-labels">
+        </div>
+    </div>
+</script>
+
 <script type="text/html" id="chart-temp">
     <div class="js-patient-chart">
-        <div class="js-printable">
+        <div class="js-printable js-chart-container chart-container summary-ch js-summary-ch">
             <div class="js-chart-section chart-section">
-                <div class="col-sm-12 js-labels" style="column-count: 3">
-                </div>
-                <div class="clearfix"></div>
+                <div class="js-labels-container"></div>
                 <h3 class="text-center">Summary View of Timestamps</h3>
                 <div style="margin-top: 50px">
-                    <div class="js-summary js-vs-chart"  style="position: relative"></div>
+                    <div class="js-summary js-vs-chart" style="position: relative"></div>
                 </div>
             </div>
             <div style="margin-top: 10px" class="text-center">
-                <div class="js-show-detail no-print btn btn-primary" data-val="all">Show Details</div>
+                <div class="js-show-detail show-detail no-print btn btn-primary" data-val="all">Show Details</div>
+                <div class="js-hide-detail hide-detail no-print btn btn-primary hidden" data-val="all">Hide Details</div>
             </div>
+            <div class="col-sm-6" style="float: none;margin: auto">
+                <div class="js-legends-container"></div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="print-page-break"></div>
             <hr />
         </div>
-        <div class="print-page-break"></div>
-        <div class="hidden js-printable" data-show="all">
+        <div class="clearfix"></div>
+
+        <div class="hidden js-printable js-chart-container chart-container preop-ch js-preop-ch" data-show="all">
             <div  class="js-chart-section chart-section">
-                <div class="col-sm-12 js-labels" style="column-count: 3">
-                </div>
+                <div class="js-labels-container"></div>
                 <div class="clearfix"></div>
                 <h3 class="text-center">PreOp Timestamps</h3>
                 <div style="margin-top: 50px">
                     <div class="js-preop js-vs-chart"  style="position: relative"></div>
                 </div>
                 <div>
-                    <div class="status-container">
-                        <label>Status: </label>
-                        <span class="js-status"></span>
+                    <div class="col-sm-8">
+                        <div class="status-container">
+                            <label>Status: </label>
+                            <span class="js-status"></span>
+                        </div>
+                        <div class="js-lst" data-prop="delayReasons">
+                            <div class="text-left reason-heading">Delay Reasons</div>
+                            <ol></ol>
+                        </div>
+                        <div class="js-lst" data-prop="cancelReasons">
+                            <div class="text-left reason-heading">Cancel Reasons</div>
+                            <ol></ol>
+                        </div>
+                        <div class="js-lst" data-prop="cancelDetails">
+                            <div class="text-left reason-heading">Cancel Details</div>
+                            <ol></ol>
+                        </div>
                     </div>
-                    <div class="js-lst" data-prop="delayReasons">
-                        <div class="text-left reason-heading">Delay Reasons</div>
-                        <ol>
-
-                        </ol>
-                    </div>
-                    <div class="js-lst" data-prop="cancelReasons">
-                        <div class="text-left reason-heading">Cancel Reasons</div>
-                        <ol>
-
-                        </ol>
-                    </div>
-                    <div class="js-lst" data-prop="cancelDetails">
-                        <div class="text-left reason-heading">Cancel Details</div>
-                        <ol>
-
-                        </ol>
+                    <div class="col-sm-4">
+                        <div class="js-legends-container"></div>
                     </div>
                 </div>
+                <div class="clearfix"></div>
             </div>
+            <div class="print-page-break"></div>
             <hr />
         </div>
-        <div class="print-page-break"></div>
-        <div class="hidden js-printable" data-show="all">
+        <div class="clearfix"></div>
+
+        <div class="hidden js-printable js-chart-container chart-container interop-ch js-interop-ch" data-show="all">
             <div class="js-chart-section chart-section">
-                <div class="col-sm-12 js-labels" style="column-count: 3">
-                </div>
+                <div class="js-labels-container"></div>
                 <div class="clearfix"></div>
                 <h3 class="text-center">IntraOp Timestamps</h3>
                 <div style="margin-top: 50px">
                     <div class="js-interop js-vs-chart"  style="position: relative"></div>
                 </div>
                 <div>
-                    <div class="status-container">
-                        <label>Status: </label>
-                        <span class="js-status"></span>
+                    <div class="col-sm-8">
+                        <div class="status-container">
+                            <label>Status: </label>
+                            <span class="js-status"></span>
+                        </div>
+                        <div class="js-lst" data-prop="delayReasons">
+                            <div class="text-left reason-heading">Delay Reasons</div>
+                            <ol></ol>
+                        </div>
+                        <div class="js-lst" data-prop="cancelReasons">
+                            <div class="text-left reason-heading">Cancel Reasons</div>
+                            <ol></ol>
+                        </div>
+                        <div class="js-lst" data-prop="cancelDetails">
+                            <div class="text-left reason-heading">Cancel Details</div>
+                            <ol></ol>
+                        </div>
                     </div>
-                    <div class="js-lst" data-prop="delayReasons">
-                        <div class="text-left reason-heading">Delay Reasons</div>
-                        <ol>
-
-                        </ol>
-                    </div>
-                    <div class="js-lst" data-prop="cancelReasons">
-                        <div class="text-left reason-heading">Cancel Reasons</div>
-                        <ol>
-
-                        </ol>
-                    </div>
-                    <div class="js-lst" data-prop="cancelDetails">
-                        <div class="text-left reason-heading">Cancel Details</div>
-                        <ol>
-
-                        </ol>
+                    <div class="col-sm-4">
+                        <div class="js-legends-container"></div>
                     </div>
                 </div>
+                <div class="clearfix"></div>
             </div>
+
+            <div class="print-page-break"></div>
             <hr />
         </div>
-        <div class="print-page-break"></div>
-        <div class="hidden js-printable" data-show="all">
-            <div  class="js-chart-section chart-section">
-                <div class="col-sm-12 js-labels" style="column-count: 3">
-                </div>
+        <div class="clearfix"></div>
+
+        <div class="hidden js-printable js-chart-container chart-container postop-ch js-postop-ch" data-show="all">
+            <div class="js-chart-section chart-section">
+                <div class="js-labels-container"></div>
                 <div class="clearfix"></div>
                 <h3 class="text-center">PostOp Timestamps</h3>
                 <div style="margin-top: 50px">
                     <div class="js-postop js-vs-chart"  style="position: relative"></div>
                 </div>
                 <div>
-                    <div class="status-container">
-                        <label>Status: </label>
-                        <span class="js-status"></span>
+                    <div class="col-sm-8">
+                        <div class="status-container">
+                            <label>Status: </label>
+                            <span class="js-status"></span>
+                        </div>
+                        <div class="js-lst" data-prop="delayReasons">
+                            <div class="text-left reason-heading">Delay Reasons</div>
+                            <ol></ol>
+                        </div>
+                        <div class="js-lst" data-prop="cancelReasons">
+                            <div class="text-left reason-heading">Cancel Reasons</div>
+                            <ol></ol>
+                        </div>
+                        <div class="js-lst" data-prop="cancelDetails">
+                            <div class="text-left reason-heading">Cancel Details</div>
+                            <ol></ol>
+                        </div>
                     </div>
-                    <div class="js-lst" data-prop="delayReasons">
-                        <div class="text-left reason-heading">Delay Reasons</div>
-                        <ol>
-
-                        </ol>
-                    </div>
-                    <div class="js-lst" data-prop="cancelReasons">
-                        <div class="text-left reason-heading">Cancel Reasons</div>
-                        <ol>
-
-                        </ol>
-                    </div>
-                    <div class="js-lst" data-prop="cancelDetails">
-                        <div class="text-left reason-heading">Cancel Details</div>
-                        <ol>
-
-                        </ol>
+                    <div class="col-sm-4">
+                        <div class="js-legends-container"></div>
                     </div>
                 </div>
+                <div class="clearfix"></div>
             </div>
-
+            <div class="print-page-break"></div>
             <hr />
         </div>
-        <div class="print-page-break"></div>
+        <div class="clearfix"></div>
     </div>
 </script>
 
@@ -1035,7 +933,11 @@
     <div class="js-print-page no-print btn btn-primary">Print</div>
 </div>
 
-<div class="js-printable hidden">
+<div class="img only-print js-canvases">
+
+</div>
+
+<div class="js-printable hidden header-section">
     <div class="header row">
         <div class="col-xs-3">
             <img src="" id="left-header-img" style="width: 100%" />
@@ -1077,6 +979,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-duration-format/1.3.0/moment-duration-format.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.0/es6-promise.auto.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.0/es6-promise.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
 <script src="timeline.js"></script>
 </body>
 </html>
