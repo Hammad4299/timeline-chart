@@ -45,7 +45,7 @@ Timeline.prototype.initTimeline = function () {
     var startDate = self.min;
     this.timeLabels = [];
     var steps = Math.ceil(self.max.diff(startDate,'minutes')/self.step)+1;
-
+    var modifier = 0;
     for(var x=0;x<=steps;++x) {
         var date = startDate.clone().add(x*self.step,'minutes');
         var sDate = date.clone();
@@ -66,39 +66,68 @@ Timeline.prototype.initTimeline = function () {
                 minsStep++;
             }
 
-            if(cStep==fixedStartStep+1){ //Before fixed
+            if(cStep==fixedStartStep+1 + modifier){ //Before fixed
+                var pre = self.stepLabels[self.stepLabels.length-1];
                 obj.start = self.fixedProps[0].toShow;
-                if(self.stepLabels.length>0){
-                    self.stepLabels[self.stepLabels.length-1].end = obj.start.clone();
-                }
+                if(pre.start.clone().diff(obj.start,'second') == 0){
+                    modifier = -1;
+                    x--;
+                    obj = null;
+                }else{
+                    if(self.stepLabels.length>0){
+                        pre.end = obj.start.clone().subtract(2,'second');
+                    }
 
-                obj.end = obj.start;
-            } else if(cStep == fixedStartStep+2) {
+                    obj.end = obj.start;
+                }
+            } else if(cStep == fixedStartStep+2 + modifier) {
                 obj.start = null;
                 obj.s = self.fixedProps[1].toShow;
                 obj.end = self.fixedProps[1].toShow;
-            } else if(cStep == fixedStartStep+3) {
+                obj.s = null;
+                obj.end = null;
+            } else if(cStep == fixedStartStep+3 + modifier) {
                 var pre = null;
                 if(self.stepLabels.length>0){
                     pre = self.stepLabels[self.stepLabels.length-3];
                 }
                 var toSet = self.fixedProps[1].toShow.clone().startOf('hour');
+                var danger = false;
                 if(!pre || pre.start.clone().diff(toSet,'minutes')<0)
                     obj.start = toSet;
-                else
+                else{
+                    danger = true;
                     obj.start = self.fixedProps[1].toShow.clone().endOf('hour').add(1,'minute');
+                }
                 obj.end = obj.start.clone().add(self.step,'minute');
+
+                if(danger){
+                    var t = obj.start.clone();
+                    var pre = self.stepLabels[self.stepLabels.length-1];
+                    console.log(pre);
+                    pre.end = t.clone();
+                    var tenPercent = pre.end.clone().diff(self.fixedProps[1].toShow,'minutes');
+                    //when surgury end == HH:00
+                    if(tenPercent == 0){
+                        pre.s = self.fixedProps[1].toShow.clone().subtract(1,'second');
+                        pre.end = self.fixedProps[1].toShow.clone();
+                    }else{
+                        pre.s = pre.end.clone().subtract(tenPercent*10,'minute');
+                    }
+                }
             }
-            else if (cStep > fixedStartStep+3){
+            else if (cStep > fixedStartStep+3+ modifier){
                 obj.start = self.stepLabels[self.stepLabels.length-1].end.clone();
                 obj.end = obj.start.clone().add(self.step,'minute');
             }
         }
 
-        if(!obj.s)
+
+        if(obj && !obj.s)
             obj.s = obj.start;
 
-        self.stepLabels.push(obj);
+        if(obj)
+            self.stepLabels.push(obj);
     }
 }
 
@@ -251,13 +280,19 @@ Timeline.prototype.resolveScaledTime = function (time) {
     var start = null;
     var pre = null;
 
+    var log = false;
+    if(time.format('HH:mm') == '16:50')
+        log = true;
+
     self.stepLabels.map(function (stepLabel) {
         var diff = 0;
         var diff2 = 0;
 
-        if(stepLabel.s && stepLabel.end){
-            diff = time.clone().diff(stepLabel.s, 'minutes');
-            diff2 = time.clone().diff(stepLabel.end, 'minutes');
+        if(stepLabel.s && stepLabel.end && !start){
+            diff = time.clone().diff(stepLabel.s, 'seconds');
+            diff2 = time.clone().diff(stepLabel.end, 'seconds');
+
+
 
             if(diff>=0 && diff2 <= 0){
                 start = stepLabel;
@@ -266,10 +301,10 @@ Timeline.prototype.resolveScaledTime = function (time) {
     });
 
     if(start){
-        var len = start.end.clone().diff(start.s,'minutes');
-        var scale = len/self.step;
-        var d = time.clone().diff(start.s,'minutes');
-        toRet = start.actual.clone().add(d/scale,'minutes');
+        var len = start.end.clone().diff(start.s,'seconds');
+        var scale = len/(self.step*60);
+        var d = time.clone().diff(start.s,'seconds');
+        toRet = start.actual.clone().add(d/scale,'seconds');
     }
     return toRet;
 }
@@ -310,8 +345,10 @@ Timeline.prototype.trim = function () {
     }
 
     this.stepLabels = this.stepLabels.slice(minIndex,maxIndex+1);
-    this.min = this.stepLabels[0].actual;
-    this.max = this.stepLabels[this.stepLabels.length-1].actual;
+    if(this.stepLabels.length>0){
+        this.min = this.stepLabels[0].actual;
+        this.max = this.stepLabels[this.stepLabels.length-1].actual;
+    }
 }
 
 Timeline.prototype.prepare = function () {
@@ -509,19 +546,22 @@ function setLabels(jsonData, container) {
 
 function getData(arr, jsonData) {
     var data = [];
-    arr.map(function (it) {
-        data.push({
-            id: it.ObjectId,
-            content: it.Name,
-            parent: it.Parent,
-            Status: it.Status,
-            timestamp: it.TimeStamp,
-            updatedBy: it.UpdateBy,
-            fixed: it.SqueezeAfter,
-            color: jsonData.Palette[it.Group],
-            start: moment(moment(it.TimeStamp,'YYYY-MM-DD HH:mm').format('HH:mm'),'HH:mm')
+    console.log(arr);
+    if(arr){
+        arr.map(function (it) {
+            data.push({
+                id: it.ObjectId,
+                content: it.Name,
+                parent: it.Parent,
+                Status: it.Status,
+                timestamp: it.TimeStamp,
+                updatedBy: it.UpdateBy,
+                fixed: it.SqueezeAfter,
+                color: jsonData.Palette[it.Group],
+                start: moment(moment(it.TimeStamp,'YYYY-MM-DD HH:mm').format('HH:mm'),'HH:mm')
+            });
         });
-    });
+    }
 
     return data;
 }
@@ -578,6 +618,7 @@ $(document).ready(function () {
         var total = $('.js-chart-container').length;
         $('.js-canvases').html('');
         alert('Please wait for printing to be ready.')
+        var toDel = [];
         $('.js-chart-container').each(function () {
             var e = $(this);
             (function () {
@@ -589,21 +630,39 @@ $(document).ready(function () {
                 ee.addClass('capture');
 
                 html2canvas(ee[0],{
-                    onrendered: function(canvas) {
-                        i++;
-                        var img = $("<img />");
-                        img.css('width','100%');
-                        img.css('height','100%');
-                        img.attr('src',canvas.toDataURL());
-                        $('.js-canvases').append(img);
-                        $('.js-canvases').append("<div class='print-page-break'></div>");
-                        ee.removeClass('capture');
+                    onrendered: function (canvas) {
+                        (function(){
+                            var ind = k;
+                            var img = $("<img />");
+                            img.css('width', '100%');
+                            img.css('height', '100%');
+                            img.attr('data-i', ind);
+                            $('.js-canvases').append(img);
+                            k++;
+                            j++;
+                            if (j != total) {
+                                $('.js-canvases').append("<div class='print-page-break'></div>");
+                            }
 
-                        if(i == total){
-                            setTimeout(function () {
-                                window.print();
-                            },2000);
-                        }
+                            UploadImage(canvas.toDataURL(), function (data) {
+                                console.log(ind);
+                                i++;
+                                var img = $('img[data-i=' + ind + ']');
+                                img.attr('src', data);
+                                toDel.push(data.substring(data.lastIndexOf('/')+1));
+                                ee.removeClass('capture');
+
+                                if (i == total) {
+                                    setTimeout(function () {
+                                        toDel.map(function (it) {
+                                            DeletePrint(it,function () {
+                                            });
+                                        });
+                                        window.print();
+                                    }, 2000);
+                                }
+                            });
+                        }) ();
                     }
                 });
             })();
@@ -649,6 +708,7 @@ $(document).ready(function () {
         });
 
         data.groups = [];
+        console.log(data);
         var toIns = $(chartsTemp);
         toIns.attr('data-chart-id',i);
         container.append(toIns);

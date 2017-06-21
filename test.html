@@ -4,6 +4,14 @@
     <title>OR Report</title>
 
     <style type="text/css">
+        .vis-item.vis-box{
+            z-index: 5!important;
+        }
+
+        .vis-item.vis-line{
+            z-index: 2!important;
+        }
+
         /*@page {*/
             /*size: A4;*/
         /*}*/
@@ -114,7 +122,7 @@
             margin-top: 50px;
         }
     </style>
-
+    <meta http-equiv="Content-Security-Policy" content="img-src * data:;default-src * 'unsafe-inline'" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.19.1/vis.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -124,11 +132,11 @@
 <input type="hidden" value='{
   "ImageIcon1": "http://dev2.coreyfy.com/coreydata/coreyicons/asctype/consultation.png",
   "ImageIcon2": "http://dev2.coreyfy.com/coreydata/coreyicons/asctype/contact_us.png",
-  "ScheduledCases": 2,
-  "CompletedCases": 2,
-  "OnTimeStarts": "50",
+  "ScheduledCases": 1,
+  "CompletedCases": 1,
+  "OnTimeStarts": "100",
   "ReportTitle": "OR Operations Report",
-  "ReportDate": "4/13/2017",
+  "ReportDate": "6/13/2017",
   "ReportImage": "http://dev2.coreyfy.com/crmfiles/report.png",
   "Palette": {
     "Patient": "#008895",
@@ -146,14 +154,14 @@
   ],
   "PatientUpdate": [
     {
-      "Name": "Nat",
-      "ProcName": "Knee Replacement",
+      "Name": "Dar, G(D7654)",
+      "ProcName": "Achilles Tendon Repair",
       "OR": "OR1",
-      "Case": "Ap case 1",
+      "Case": "002",
       "Specialty": "Orthopedics",
-      "Status": "",
-      "SchStartTime": "4/13/2017 9:00:00 AM",
-      "SchEndTime": "4/13/2017 3:00:00 PM",
+      "Status": "On-time",
+      "SchStartTime": "6/13/2017 9:00:00 AM",
+      "SchEndTime": "6/13/2017 11:30:00 AM",
       "Explanation": "",
       "Parent": [
         "PreOp",
@@ -166,48 +174,31 @@
           "Value": "Harrison"
         },
         {
-          "Name": "CRNA",
-          "Value": "KWeatherley"
+          "Name": "Check-in Nurse",
+          "Value": "ARaheem"
         },
         {
           "Name": "Anesthesiologist",
           "Value": "TBorsari"
-        },
-        {
-          "Name": "Circulating Nurse",
-          "Value": "CAmbatali"
-        },
-        {
-          "Name": "Scrub Tech",
-          "Value": "CAssaf"
-        },
-        {
-          "Name": "SRNA",
-          "Value": "MBougiamas"
-        },
-        {
-          "Name": "Break",
-          "Value": "DStackhouse"
-        },
-        {
-          "Name": "On Call CRNA #2",
-          "Value": "MBougiamas"
-        },
-        {
-          "Name": "Circulating Nurse 2",
-          "Value": "CAmbatali"
-        },
-        {
-          "Name": "Scrub Tech 2",
-          "Value": "CAssaf"
         }
       ],
       "stageupdates": [
         {
+          "ObjectId": 361,
+          "Name": "Patient Arrived",
+          "Parent": "PreOp",
+          "TimeStamp": "2017-06-13 08:00",
+          "UpdateBy": "VADemoadmin",
+          "Status": "Start",
+          "SqueezeBefore": false,
+          "SqueezeAfter": false,
+          "Group": "Patient"
+        },
+        {
           "ObjectId": 338,
           "Name": "PreOp Nursing Start",
           "Parent": "PreOp",
-          "TimeStamp": "2017-04-13 09:15",
+          "TimeStamp": "2017-06-13 08:05",
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
@@ -218,7 +209,7 @@
           "ObjectId": 358,
           "Name": "PreOp Nursing Completed",
           "Parent": "PreOp",
-          "TimeStamp": "2017-04-13 09:30",
+          "TimeStamp": "2017-06-13 08:15",
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
@@ -229,7 +220,7 @@
           "ObjectId": 562,
           "Name": "Circulator PreOp Start",
           "Parent": "PreOp",
-          "TimeStamp": "2017-04-13 10:15",
+          "TimeStamp": "2017-06-13 08:50",
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
@@ -240,7 +231,7 @@
           "ObjectId": 564,
           "Name": "Transport to OR",
           "Parent": "PreOp",
-          "TimeStamp": "2017-04-13 10:30",
+          "TimeStamp": "2017-06-13 08:55",
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
@@ -251,7 +242,7 @@
           "ObjectId": 556,
           "Name": "Surgeon PreOp Start",
           "Parent": "PreOp",
-          "TimeStamp": "2017-04-13 09:32",
+          "TimeStamp": "2017-06-13 08:37",
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
@@ -262,7 +253,7 @@
           "ObjectId": 558,
           "Name": "Surgeon PreOp Completed",
           "Parent": "PreOp",
-          "TimeStamp": "2017-04-13 09:40",
+          "TimeStamp": "2017-06-13 08:45",
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
@@ -273,7 +264,7 @@
           "ObjectId": 559,
           "Name": "Anesthesia PreOp Start",
           "Parent": "PreOp",
-          "TimeStamp": "2017-04-13 09:50",
+          "TimeStamp": "2017-06-13 08:20",
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
@@ -284,7 +275,7 @@
           "ObjectId": 561,
           "Name": "Anesthesia PreOp Complete",
           "Parent": "PreOp",
-          "TimeStamp": "2017-04-13 10:05",
+          "TimeStamp": "2017-06-13 08:33",
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
@@ -295,7 +286,7 @@
           "ObjectId": 340,
           "Name": "Patient In-Room",
           "Parent": "IntraOp",
-          "TimeStamp": "2017-04-13 10:50",
+          "TimeStamp": "2017-06-13 09:00",
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
@@ -306,7 +297,7 @@
           "ObjectId": 486,
           "Name": "Timeout",
           "Parent": "IntraOp",
-          "TimeStamp": "2017-04-13 11:40",
+          "TimeStamp": "2017-06-13 09:35",
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
@@ -317,7 +308,7 @@
           "ObjectId": 347,
           "Name": "Wheels Out",
           "Parent": "IntraOp",
-          "TimeStamp": "2017-04-13 14:15",
+          "TimeStamp": "2017-06-13 11:12",
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
@@ -328,7 +319,7 @@
           "ObjectId": 483,
           "Name": "Surgeon In Room",
           "Parent": "IntraOp",
-          "TimeStamp": "2017-04-13 11:00",
+          "TimeStamp": "2017-06-13 09:20",
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
@@ -339,7 +330,7 @@
           "ObjectId": 422,
           "Name": "Incision Time",
           "Parent": "IntraOp",
-          "TimeStamp": "2017-04-13 11:50",
+          "TimeStamp": "2017-06-13 10:15",
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
@@ -350,7 +341,7 @@
           "ObjectId": 566,
           "Name": "Surgery End",
           "Parent": "IntraOp",
-          "TimeStamp": "2017-04-13 13:00",
+          "TimeStamp": "2017-06-13 11:04",
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": true,
@@ -361,7 +352,7 @@
           "ObjectId": 461,
           "Name": "Nerve Block Complete",
           "Parent": "IntraOp",
-          "TimeStamp": "2017-04-13 11:10",
+          "TimeStamp": "2017-06-13 08:50",
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
@@ -372,7 +363,7 @@
           "ObjectId": 565,
           "Name": "Anesthesia Started",
           "Parent": "IntraOp",
-          "TimeStamp": "2017-04-13 09:15",
+          "TimeStamp": "2017-06-13 09:50",
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
@@ -383,7 +374,7 @@
           "ObjectId": 342,
           "Name": "Anesthesia Ready",
           "Parent": "IntraOp",
-          "TimeStamp": "2017-04-13 11:30",
+          "TimeStamp": "2017-06-13 09:55",
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
@@ -394,7 +385,7 @@
           "ObjectId": 478,
           "Name": "Room Ready - EMS",
           "Parent": "IntraOp",
-          "TimeStamp": "2017-04-13 10:35",
+          "TimeStamp": "2017-06-13 08:46",
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
@@ -405,7 +396,7 @@
           "ObjectId": 350,
           "Name": "Patient Discharged",
           "Parent": "PostOp",
-          "TimeStamp": "2017-04-13 15:10",
+          "TimeStamp": "2017-06-13 12:20",
           "UpdateBy": "VADemoadmin",
           "Status": "Complete",
           "SqueezeBefore": false,
@@ -414,276 +405,9 @@
         },
         {
           "ObjectId": 348,
-          "Name": "Patient Arrived",
+          "Name": "PostOp Arrived",
           "Parent": "PostOp",
-          "TimeStamp": "2017-04-13 14:30",
-          "UpdateBy": "VADemoadmin",
-          "Status": "Start",
-          "SqueezeBefore": false,
-          "SqueezeAfter": false,
-          "Group": "Nursing"
-        }
-      ],
-      "delayReasons": [
-        {
-          "TimeStamp": "2017-04-13 05:04",
-          "Note": "Test"
-        },
-        {
-          "UpdateBy": "VADemoadmin",
-          "TimeStamp": "2017-05-24 01:27",
-          "Note": "This is a test reason"
-        }
-      ],
-      "cancelDetails": [],
-      "cancelReasons": [
-        {
-          "TimeStamp": "2017-04-13 01:04",
-          "Note": "Test"
-        },
-        {
-          "UpdateBy": "VADemoadmin",
-          "TimeStamp": "2017-05-23 21:27",
-          "Note": "This is a test reason"
-        }
-      ]
-    },
-    {
-      "Name": "int, M",
-      "ProcName": "Hip Replacement",
-      "OR": "OR5",
-      "Case": "AP-Case",
-      "Specialty": "Orthopedics",
-      "Status": "",
-      "SchStartTime": "4/13/2017 9:00:00 AM",
-      "SchEndTime": "4/13/2017 12:00:00 PM",
-      "Explanation": "",
-      "Parent": [
-        "PreOp",
-        "IntraOp",
-        "PostOp"
-      ],
-      "roles": [
-        {
-          "Name": "Anesthesiologist",
-          "Value": "ACanaria"
-        }
-      ],
-      "stageupdates": [
-        {
-          "ObjectId": 338,
-          "Name": "PreOp Nursing Start",
-          "Parent": "PreOp",
-          "TimeStamp": "2017-04-13 09:15",
-          "UpdateBy": "VADemoadmin",
-          "Status": "Start",
-          "SqueezeBefore": false,
-          "SqueezeAfter": false,
-          "Group": "Nursing"
-        },
-        {
-          "ObjectId": 358,
-          "Name": "PreOp Nursing Completed",
-          "Parent": "PreOp",
-          "TimeStamp": "2017-04-13 09:30",
-          "UpdateBy": "VADemoadmin",
-          "Status": "Complete",
-          "SqueezeBefore": false,
-          "SqueezeAfter": false,
-          "Group": "Nursing"
-        },
-        {
-          "ObjectId": 562,
-          "Name": "Circulator PreOp Start",
-          "Parent": "PreOp",
-          "TimeStamp": "2017-04-13 10:15",
-          "UpdateBy": "VADemoadmin",
-          "Status": "Start",
-          "SqueezeBefore": false,
-          "SqueezeAfter": false,
-          "Group": "Nursing"
-        },
-        {
-          "ObjectId": 564,
-          "Name": "Transport to OR",
-          "Parent": "PreOp",
-          "TimeStamp": "2017-04-13 10:30",
-          "UpdateBy": "VADemoadmin",
-          "Status": "Complete",
-          "SqueezeBefore": false,
-          "SqueezeAfter": false,
-          "Group": "Nursing"
-        },
-        {
-          "ObjectId": 556,
-          "Name": "Surgeon PreOp Start",
-          "Parent": "PreOp",
-          "TimeStamp": "2017-04-13 09:32",
-          "UpdateBy": "VADemoadmin",
-          "Status": "Start",
-          "SqueezeBefore": false,
-          "SqueezeAfter": false,
-          "Group": "Surgeon"
-        },
-        {
-          "ObjectId": 558,
-          "Name": "Surgeon PreOp Completed",
-          "Parent": "PreOp",
-          "TimeStamp": "2017-04-13 09:40",
-          "UpdateBy": "VADemoadmin",
-          "Status": "Complete",
-          "SqueezeBefore": false,
-          "SqueezeAfter": false,
-          "Group": "Surgeon"
-        },
-        {
-          "ObjectId": 559,
-          "Name": "Anesthesia PreOp Start",
-          "Parent": "PreOp",
-          "TimeStamp": "2017-04-13 09:50",
-          "UpdateBy": "VADemoadmin",
-          "Status": "Start",
-          "SqueezeBefore": false,
-          "SqueezeAfter": false,
-          "Group": "Anesthesia"
-        },
-        {
-          "ObjectId": 561,
-          "Name": "Anesthesia PreOp Complete",
-          "Parent": "PreOp",
-          "TimeStamp": "2017-04-13 10:05",
-          "UpdateBy": "VADemoadmin",
-          "Status": "Complete",
-          "SqueezeBefore": false,
-          "SqueezeAfter": false,
-          "Group": "Anesthesia"
-        },
-        {
-          "ObjectId": 340,
-          "Name": "Patient In-Room",
-          "Parent": "IntraOp",
-          "TimeStamp": "2017-04-13 09:00",
-          "UpdateBy": "VADemoadmin",
-          "Status": "Start",
-          "SqueezeBefore": false,
-          "SqueezeAfter": false,
-          "Group": "Patient"
-        },
-        {
-          "ObjectId": 486,
-          "Name": "Timeout",
-          "Parent": "IntraOp",
-          "TimeStamp": "2017-04-13 11:40",
-          "UpdateBy": "VADemoadmin",
-          "Status": "Complete",
-          "SqueezeBefore": false,
-          "SqueezeAfter": false,
-          "Group": "Patient"
-        },
-        {
-          "ObjectId": 347,
-          "Name": "Wheels Out",
-          "Parent": "IntraOp",
-          "TimeStamp": "2017-04-13 12:00",
-          "UpdateBy": "VADemoadmin",
-          "Status": "Complete",
-          "SqueezeBefore": false,
-          "SqueezeAfter": false,
-          "Group": "Nursing"
-        },
-        {
-          "ObjectId": 483,
-          "Name": "Surgeon In Room",
-          "Parent": "IntraOp",
-          "TimeStamp": "2017-04-13 11:00",
-          "UpdateBy": "VADemoadmin",
-          "Status": "Start",
-          "SqueezeBefore": false,
-          "SqueezeAfter": false,
-          "Group": "Surgeon"
-        },
-        {
-          "ObjectId": 422,
-          "Name": "Incision Time",
-          "Parent": "IntraOp",
-          "TimeStamp": "2017-04-13 11:50",
-          "UpdateBy": "VADemoadmin",
-          "Status": "Start",
-          "SqueezeBefore": false,
-          "SqueezeAfter": true,
-          "Group": "Surgeon"
-        },
-        {
-          "ObjectId": 566,
-          "Name": "Surgery End",
-          "Parent": "IntraOp",
-          "TimeStamp": "2017-04-13 14:00",
-          "UpdateBy": "VADemoadmin",
-          "Status": "Complete",
-          "SqueezeBefore": true,
-          "SqueezeAfter": false,
-          "Group": "Surgeon"
-        },
-        {
-          "ObjectId": 461,
-          "Name": "Nerve Block Complete",
-          "Parent": "IntraOp",
-          "TimeStamp": "2017-04-13 11:10",
-          "UpdateBy": "VADemoadmin",
-          "Status": "Complete",
-          "SqueezeBefore": false,
-          "SqueezeAfter": false,
-          "Group": "Anesthesia"
-        },
-        {
-          "ObjectId": 565,
-          "Name": "Anesthesia Started",
-          "Parent": "IntraOp",
-          "TimeStamp": "2017-04-13 09:15",
-          "UpdateBy": "VADemoadmin",
-          "Status": "Start",
-          "SqueezeBefore": false,
-          "SqueezeAfter": false,
-          "Group": "Anesthesia"
-        },
-        {
-          "ObjectId": 342,
-          "Name": "Anesthesia Ready",
-          "Parent": "IntraOp",
-          "TimeStamp": "2017-04-13 11:30",
-          "UpdateBy": "VADemoadmin",
-          "Status": "Complete",
-          "SqueezeBefore": false,
-          "SqueezeAfter": false,
-          "Group": "Anesthesia"
-        },
-        {
-          "ObjectId": 478,
-          "Name": "Room Ready - EMS",
-          "Parent": "IntraOp",
-          "TimeStamp": "2017-04-13 10:35",
-          "UpdateBy": "VADemoadmin",
-          "Status": "Complete",
-          "SqueezeBefore": false,
-          "SqueezeAfter": false,
-          "Group": "EMS"
-        },
-        {
-          "ObjectId": 350,
-          "Name": "Patient Discharged",
-          "Parent": "PostOp",
-          "TimeStamp": "2017-04-13 15:10",
-          "UpdateBy": "VADemoadmin",
-          "Status": "Complete",
-          "SqueezeBefore": false,
-          "SqueezeAfter": false,
-          "Group": "Patient"
-        },
-        {
-          "ObjectId": 348,
-          "Name": "Patient Arrived",
-          "Parent": "PostOp",
-          "TimeStamp": "2017-04-13 14:30",
+          "TimeStamp": "2017-06-13 11:33",
           "UpdateBy": "VADemoadmin",
           "Status": "Start",
           "SqueezeBefore": false,
