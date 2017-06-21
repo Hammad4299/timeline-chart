@@ -72,6 +72,7 @@ Timeline.prototype.initTimeline = function () {
                 if(pre.start.clone().diff(obj.start,'second') == 0){
                     modifier = -1;
                     x--;
+                    pre.end = obj.start.clone().add(2,'second');
                     obj = null;
                 }else{
                     if(self.stepLabels.length>0){
@@ -87,21 +88,18 @@ Timeline.prototype.initTimeline = function () {
                 obj.s = null;
                 obj.end = null;
             } else if(cStep == fixedStartStep+3 + modifier) {
-                var pre = null;
-                if(self.stepLabels.length>0){
-                    pre = self.stepLabels[self.stepLabels.length-3];
-                }
-                var toSet = self.fixedProps[1].toShow.clone().startOf('hour');
+                var pre = self.fixedProps[0].toShow.clone().endOf('hour').add(1,'minute');
+                var toSet = self.fixedProps[1].toShow.clone().endOf('hour').add(1,'minute');
                 var danger = false;
-                if(!pre || pre.start.clone().diff(toSet,'minutes')<0)
-                    obj.start = toSet;
-                else{
-                    danger = true;
-                    obj.start = self.fixedProps[1].toShow.clone().endOf('hour').add(1,'minute');
+
+                if(pre.diff(toSet,'minutes')==0){
+                    obj.start = self.fixedProps[0].toShow.clone().endOf('hour').add(1,'minute');
+                } else {
+                    obj.start = self.fixedProps[1].toShow.clone().startOf('hour');
                 }
                 obj.end = obj.start.clone().add(self.step,'minute');
 
-                if(danger){
+                //if(danger){
                     var t = obj.start.clone();
                     var pre = self.stepLabels[self.stepLabels.length-1];
                     console.log(pre);
@@ -114,7 +112,7 @@ Timeline.prototype.initTimeline = function () {
                     }else{
                         pre.s = pre.end.clone().subtract(tenPercent*10,'minute');
                     }
-                }
+                //}
             }
             else if (cStep > fixedStartStep+3+ modifier){
                 obj.start = self.stepLabels[self.stepLabels.length-1].end.clone();
