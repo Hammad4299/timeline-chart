@@ -650,22 +650,23 @@ $(document).ready(function () {
                             }
 
                             UploadImage(canvas.toDataURL(), function (data) {
-                                console.log(ind);
-                                ready++;
                                 var img = $('img[data-i=' + ind + ']');
-                                img.attr('src', data);
-                                toDel.push(data.substring(data.lastIndexOf('/')+1));
-                                ee.removeClass('capture');
-
-                                if (ready == total) {
-                                    setTimeout(function () {
-                                        toDel.map(function (it) {
-                                            DeletePrint(it,function () {
+                                img.one('load',function () {
+                                    ready++;
+                                    toDel.push(data.substring(data.lastIndexOf('/')+1));
+                                    ee.removeClass('capture');
+                                    if (ready == total) {
+                                        setTimeout(function () {
+                                            toDel.map(function (it) {
+                                                DeletePrint(it,function () {});
                                             });
-                                        });
-                                        window.print();
-                                    }, 2000);
-                                }
+                                            window.print();
+                                        }, 2000);
+                                    }
+                                }).attr('src', data)
+                                .each(function() {
+                                    if(this.complete) $(this).trigger('load');
+                                });
                             });
                         }) ();
                     }
