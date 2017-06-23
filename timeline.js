@@ -612,7 +612,8 @@ $(document).ready(function () {
     });
 
     $(document).on('click','.js-print-page',function () {
-        var i = 0;
+        var ready = 0;
+        var rendered = 0;
         var total = $('.js-chart-container').length;
         $('.js-canvases').html('');
         alert('Please wait for printing to be ready.')
@@ -622,7 +623,7 @@ $(document).ready(function () {
             (function () {
                 var ee = e;
                 if(ee.hasClass('hidden')){
-                    i++;
+                    ready++;
                     return;
                 }
                 ee.addClass('capture');
@@ -630,27 +631,26 @@ $(document).ready(function () {
                 html2canvas(ee[0],{
                     onrendered: function (canvas) {
                         (function(){
-                            var ind = k;
+                            var ind = rendered;
                             var img = $("<img />");
                             img.css('width', '100%');
                             img.css('height', '100%');
                             img.attr('data-i', ind);
                             $('.js-canvases').append(img);
-                            k++;
-                            j++;
-                            if (j != total) {
+                            rendered++;
+                            if (rendered != total) {
                                 $('.js-canvases').append("<div class='print-page-break'></div>");
                             }
 
                             UploadImage(canvas.toDataURL(), function (data) {
                                 console.log(ind);
-                                i++;
+                                ready++;
                                 var img = $('img[data-i=' + ind + ']');
                                 img.attr('src', data);
                                 toDel.push(data.substring(data.lastIndexOf('/')+1));
                                 ee.removeClass('capture');
 
-                                if (i == total) {
+                                if (ready == total) {
                                     setTimeout(function () {
                                         toDel.map(function (it) {
                                             DeletePrint(it,function () {
