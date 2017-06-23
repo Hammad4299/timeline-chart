@@ -55,68 +55,75 @@ Timeline.prototype.initTimeline = function () {
             end: sDate.clone().add(self.step,'minutes')
         };
 
-        if(self.fixedProps && self.fixedProps.length==2){
-            var fixedStartStep = self.timeStep(self.fixedProps[0].start,'minutes');
-            var fixedEndStep = self.timeStep(self.fixedProps[1].start,'minutes');
-            var cStep = self.timeStep(date,'minutes');
-            var mins = self.duration(self.fixedProps[1].toShow,'minutes');
-            var minsStep = Math.ceil(mins/self.step);
+        if(self.fixedProps && self.fixedProps.length==2) {
+            var fixedStartStep = self.timeStep(self.fixedProps[0].start, 'minutes');
+            var fixedEndStep = self.timeStep(self.fixedProps[1].start, 'minutes');
+            var cStep = self.timeStep(date, 'minutes');
+            var mins = self.duration(self.fixedProps[1].toShow, 'minutes');
+            var minsStep = Math.ceil(mins / self.step);
 
-            if(minsStep == mins/self.step){
+            if (minsStep == mins / self.step) {
                 minsStep++;
             }
 
-            if(cStep==fixedStartStep+1 + modifier){ //Before fixed
-                var pre = self.stepLabels[self.stepLabels.length-1];
-                obj.start = self.fixedProps[0].toShow;
-                if(pre.start.clone().diff(obj.start,'second') == 0){
-                    modifier = -1;
-                    x--;
-                    pre.end = obj.start.clone().add(2,'second');
-                    obj = null;
-                }else{
-                    if(self.stepLabels.length>0){
-                        pre.end = obj.start.clone().subtract(2,'second');
+            var pre = self.fixedProps[0].toShow.clone().endOf('hour').add(1, 'minute');
+            var toSet = self.fixedProps[1].toShow.clone().endOf('hour').add(1, 'minute');
+            if (pre.diff(toSet, 'minutes') < -120){
+                 if (cStep == fixedStartStep + 1 + modifier) { //Before fixed
+                     obj.s = obj.start;
+                     obj.start = null;
+                //     var pre = self.stepLabels[self.stepLabels.length - 1];
+                //     obj.start = self.fixedProps[0].toShow;
+                //     if (pre.start.clone().diff(obj.start, 'second') == 0) {
+                //         modifier = -1;
+                //         x--;
+                //         pre.end = obj.start.clone().add(2, 'second');
+                //         obj = null;
+                //     } else {
+                //         if (self.stepLabels.length > 0) {
+                //             pre.end = obj.start.clone().subtract(2, 'second');
+                //         }
+                //
+                //         obj.end = obj.start;
+                //     }
+                //  } else if (cStep == fixedStartStep + 2 + modifier) {
+                //     obj.start = null;
+                //     obj.s = self.fixedProps[1].toShow;
+                //     obj.end = self.fixedProps[1].toShow;
+                //     obj.s = null;
+                //     obj.end = null;
+                } else
+                    if (cStep == fixedStartStep + 2 + modifier) {
+                    var pre = self.fixedProps[0].toShow.clone().endOf('hour').add(1, 'minute');
+                    var toSet = self.fixedProps[1].toShow.clone().endOf('hour').add(1, 'minute');
+                    var danger = false;
+
+                    if (pre.diff(toSet, 'minutes') == 0) {
+                        obj.start = self.fixedProps[0].toShow.clone().endOf('hour').add(1, 'minute');
+                    } else {
+                        obj.start = self.fixedProps[1].toShow.clone().startOf('hour');
                     }
+                    obj.end = obj.start.clone().add(self.step, 'minute');
 
-                    obj.end = obj.start;
-                }
-            } else if(cStep == fixedStartStep+2 + modifier) {
-                obj.start = null;
-                obj.s = self.fixedProps[1].toShow;
-                obj.end = self.fixedProps[1].toShow;
-                obj.s = null;
-                obj.end = null;
-            } else if(cStep == fixedStartStep+3 + modifier) {
-                var pre = self.fixedProps[0].toShow.clone().endOf('hour').add(1,'minute');
-                var toSet = self.fixedProps[1].toShow.clone().endOf('hour').add(1,'minute');
-                var danger = false;
-
-                if(pre.diff(toSet,'minutes')==0){
-                    obj.start = self.fixedProps[0].toShow.clone().endOf('hour').add(1,'minute');
-                } else {
-                    obj.start = self.fixedProps[1].toShow.clone().startOf('hour');
-                }
-                obj.end = obj.start.clone().add(self.step,'minute');
-
-                //if(danger){
+                    //if(danger){
                     var t = obj.start.clone();
-                    var pre = self.stepLabels[self.stepLabels.length-1];
-                    console.log(pre);
+                    var pre = self.stepLabels[self.stepLabels.length - 1];
+
                     pre.end = t.clone();
-                    var tenPercent = pre.end.clone().diff(self.fixedProps[1].toShow,'minutes');
+                    var tenPercent = pre.end.clone().diff(self.fixedProps[1].toShow, 'minutes');
                     //when surgury end == HH:00
-                    if(tenPercent == 0){
-                        pre.s = self.fixedProps[1].toShow.clone().subtract(1,'second');
+                    if (tenPercent == 0) {
+                        pre.s = self.fixedProps[1].toShow.clone().subtract(1, 'second');
                         pre.end = self.fixedProps[1].toShow.clone();
-                    }else{
-                        pre.s = pre.end.clone().subtract(tenPercent*10,'minute');
+                    } else {
+                        pre.s = pre.end.clone().subtract(tenPercent * 10, 'minute');
                     }
-                //}
-            }
-            else if (cStep > fixedStartStep+3+ modifier){
-                obj.start = self.stepLabels[self.stepLabels.length-1].end.clone();
-                obj.end = obj.start.clone().add(self.step,'minute');
+                    //}
+                }
+                else if (cStep > fixedStartStep + 2 + modifier) {
+                    obj.start = self.stepLabels[self.stepLabels.length - 1].end.clone();
+                    obj.end = obj.start.clone().add(self.step, 'minute');
+                }
             }
         }
 
@@ -233,7 +240,7 @@ Timeline.prototype.setItems = function (items) {
             nItem[prop] = item[prop];
         }
         //if(!nItem.id)
-            nItem.id = self.items.length;
+        nItem.id = self.items.length;
 
         if(item.color && item.group === undefined)  //Not summary
             nItem.style = "background-color: "+item.color;
@@ -286,7 +293,7 @@ Timeline.prototype.resolveScaledTime = function (time) {
         var diff = 0;
         var diff2 = 0;
 
-        if(stepLabel.s && stepLabel.end && !start){
+        if(stepLabel.s && stepLabel.end){
             diff = time.clone().diff(stepLabel.s, 'seconds');
             diff2 = time.clone().diff(stepLabel.end, 'seconds');
 
@@ -414,10 +421,10 @@ Timeline.prototype.getOptions = function () {
 
             var classN = item.className;
             var html = '<div class="vis-item-content '+classN+'">' +
-                            '<i class="fa"></i>' +
-                            '<span>'+item.content+'</span>' +
-                            '<div><small><b>'+t+'</b></small></div>'+
-                        '</div>';
+                '<i class="fa"></i>' +
+                '<span>'+item.content+'</span>' +
+                '<div><small><b>'+t+'</b></small></div>'+
+                '</div>';
             var h = $(html);
 
             if(item.type!='background'){
