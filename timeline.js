@@ -369,7 +369,8 @@ Timeline.prototype.prepare = function () {
         _this.addGroup('',122);
         _this.addGroup('',111);
     }else{
-        _this.addGroup('',122,_this.fixedProps[0].color);
+        if(_this.fixedProps.length>0)
+            _this.addGroup('',122,_this.fixedProps[0].color);
     }
 }
 
